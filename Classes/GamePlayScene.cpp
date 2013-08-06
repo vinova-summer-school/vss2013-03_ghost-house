@@ -93,15 +93,12 @@ bool GamePlay::init()
 
 		// 4. Add some sprites
 		// a ghost
-		ghost1.getSprite()->setPosition(ccp(size.width - 20, size.height - 100));
 		this->addChild(ghost1.getSprite(),2);
 
 		// a second ghost ^^
-		ghost2.getSprite()->setPosition(ccp(size.width - 20, size.height/2));
 		this->addChild(ghost2.getSprite(),2);
 
 		// an angel
-		angel.getSprite()->setPosition(ccp(size.width - 40, size.height - 150));
 		this->addChild(angel.getSprite(),0);
 
 		//////////////////*** Pause Dialog Box ***////////////////////////
@@ -247,36 +244,24 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
-	CCPoint pos = angel.getSprite()->getPosition();
-	pos.x -= 1;
-	pos.y = 200 + 60*sin (0.05*pos.x);
-	if (pos.x <= 80) angel.getSprite()->setVisible(false);
-	angel.getSprite()->setPosition(pos);
-	
-	if (ghost1.getSprite()->isVisible()){
-		CCPoint pos1 = ghost1.getSprite()->getPosition();
-		pos1.x -= 1;
-		if (pos1.x <= 80){
-			House.reduceHPBy (1);
-			if (House.isDead()){
-				GameOverBox->setVisible(true);
-				CCDirector::sharedDirector()->pause();
-			}
+	angel.move();
+
+	if (ghost1.getSprite()->isVisible()) ghost1.move();
+	else {
+		House.reduceHPBy (1);
+		if (House.isDead()){
+			GameOverBox->setVisible(true);
+			CCDirector::sharedDirector()->pause();
 		}
-		else ghost1.getSprite()->setPosition(pos1);
 	}
 	
-	if (ghost2.getSprite()->isVisible()){
-		CCPoint pos2 = ghost2.getSprite()->getPosition();
-		pos2.x -= 0.75;
-		if (pos2.x <= 80){
-			House.reduceHPBy (1);
-			if (House.isDead()){
-				GameOverBox->setVisible(true);
-				CCDirector::sharedDirector()->pause();
-			}
+	if (ghost2.getSprite()->isVisible()) ghost2.move();
+	else {
+		House.reduceHPBy (1);
+		if (House.isDead()){
+			GameOverBox->setVisible(true);
+			CCDirector::sharedDirector()->pause();
 		}
-		else ghost2.getSprite()->setPosition(pos2);
 	}
 }
 
