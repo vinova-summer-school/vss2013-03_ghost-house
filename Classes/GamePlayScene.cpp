@@ -101,10 +101,8 @@ bool GamePlay::init()
 		this->addChild(ghost2.getSprite(),2);
 
 		// an angel
-		angel = CCSprite::create("angel_normal.png");
-		CC_BREAK_IF(! angel);
-		angel->setPosition(ccp(size.width - 40, size.height - 150));
-		this->addChild(angel,0);
+		angel.getSprite()->setPosition(ccp(size.width - 40, size.height - 150));
+		this->addChild(angel.getSprite(),0);
 
 		//////////////////*** Pause Dialog Box ***////////////////////////
 		// Dialog box
@@ -155,7 +153,7 @@ bool GamePlay::init()
 		GameOverBox->setPosition(ccp(size.width/2, size.height/2));
 		this->addChild(GameOverBox,3);
 		GameOverBox->setVisible(false);
-		// A Back button as a menu item
+		// A Main Menu button as a menu item
 		CCMenuItemImage *pOverBox_MainMenuItem = CCMenuItemImage::create(
 			"MainMenuButton.png",
 			"MainMenuButtonSelected.png",
@@ -249,11 +247,11 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
-	CCPoint pos = angel->getPosition();
+	CCPoint pos = angel.getSprite()->getPosition();
 	pos.x -= 1;
 	pos.y = 200 + 60*sin (0.05*pos.x);
-	if (pos.x <= 80) angel->setVisible(false);
-	angel->setPosition(pos);
+	if (pos.x <= 80) angel.getSprite()->setVisible(false);
+	angel.getSprite()->setPosition(pos);
 	
 	if (ghost1.getSprite()->isVisible()){
 		CCPoint pos1 = ghost1.getSprite()->getPosition();
