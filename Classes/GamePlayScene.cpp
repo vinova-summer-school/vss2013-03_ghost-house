@@ -219,13 +219,16 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 		if (touchingState == 3) touchingState = 1;
 		else touchingState = 2;
 		if (touchingState == 1) ghost1.reduceHPBy (1);
-		if (ghost1.isDead()) ghost1.getSprite()->setVisible(false);
 	}
 	else if (ghost2.getSprite()->boundingBox().containsPoint(pointTouched)){
 		if (touchingState == 3) touchingState = 1;
 		else touchingState = 2;
 		if (touchingState == 1) ghost2.reduceHPBy (1);
-		if (ghost2.isDead()) ghost2.getSprite()->setVisible(false);
+	}
+	else if (angel.getSprite()->boundingBox().containsPoint(pointTouched)){
+		if (touchingState == 3) touchingState = 1;
+		else touchingState = 2;
+		if (touchingState == 1) angel.reduceHPBy (1);
 	}
 	else touchingState = 3;
 
@@ -246,22 +249,17 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 void GamePlay::update (float pDt){
 	angel.move();
 
-	if (ghost1.getSprite()->isVisible()) ghost1.move();
-	else {
-		House.reduceHPBy (1);
-		if (House.isDead()){
-			GameOverBox->setVisible(true);
-			CCDirector::sharedDirector()->pause();
-		}
-	}
+	if (ghost1.getSprite()->getPositionX() >= 80) ghost1.move();
+	else House.reduceHPBy (1);
 	
-	if (ghost2.getSprite()->isVisible()) ghost2.move();
-	else {
-		House.reduceHPBy (1);
-		if (House.isDead()){
-			GameOverBox->setVisible(true);
-			CCDirector::sharedDirector()->pause();
-		}
+	if (ghost2.getSprite()->getPositionX() >= 80) ghost2.move();
+	else House.reduceHPBy (1);
+
+	if (angel.isDead()) House.reduceHPBy (1);
+	
+	if (House.isDead()){
+		GameOverBox->setVisible(true);
+		CCDirector::sharedDirector()->pause();
 	}
 }
 

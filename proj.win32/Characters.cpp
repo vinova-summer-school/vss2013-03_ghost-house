@@ -23,7 +23,8 @@ bool character::isDead (){
 }
 
 void character::move (){
-	switch(moveStyle){
+	if (HP >=0 && pos.x >= 80){
+		switch(moveStyle){
 		case 0:
 			pos.x -= 1;
 			break;
@@ -37,7 +38,8 @@ void character::move (){
 			pos.x -= 1;
 			pos.y = initPos.y + 30*sin (0.05*pos.x);
 			break;
+		}
+		Sprite->setPosition(pos);
 	}
-	if (pos.x <= 80) Sprite->setVisible(false);
-	Sprite->setPosition(pos);
+	else Sprite->setVisible(false);
 }
