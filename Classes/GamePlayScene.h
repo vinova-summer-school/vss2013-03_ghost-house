@@ -13,10 +13,13 @@ using namespace cocos2d;
 
 class GamePlay : public cocos2d::CCLayer
 {
-	ghost1 ghost1;
-	ghost2 ghost2;
+	short ghost1Count, ghost2Count, angelCount;
+	ghost1 ghost1[20];
+	ghost2 ghost2[20];
 	House House;
-	angel angel;
+	angel angel [20];
+
+	int time, stt;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 
 	CCSprite *PauseDialogBox;

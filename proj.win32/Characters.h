@@ -58,7 +58,7 @@ public:
 class House : public character{
 public:
 	House (){
-		HP = 1;
+		HP = 50;
 	}
 };
 

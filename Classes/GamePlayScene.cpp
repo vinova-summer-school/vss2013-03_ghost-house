@@ -92,14 +92,14 @@ bool GamePlay::init()
 		//////////*** Some in-game items ***////////////////////
 
 		// 4. Add some sprites
-		// a ghost
-		this->addChild(ghost1.getSprite(),2);
-
-		// a second ghost ^^
-		this->addChild(ghost2.getSprite(),2);
-
+		ghost1Count = 3;
+		ghost2Count = 3;
+		angelCount = 2;
+		// ghosts
+		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),2);
+		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
+		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),2);
 		// an angel
-		this->addChild(angel.getSprite(),0);
 
 		//////////////////*** Pause Dialog Box ***////////////////////////
 		// Dialog box
@@ -195,6 +195,8 @@ bool GamePlay::init()
 	setTouchEnabled (true);
 	scheduleUpdate ();
 
+	time = stt = 0;
+
     return bRet;
 }
 
@@ -215,22 +217,26 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 	pointTouched = CCDirector::sharedDirector()->convertToGL(pointTouched);
 
 	////// if a sprite contains the touching point
-	if (ghost1.getSprite()->boundingBox().containsPoint(pointTouched)){
-		if (touchingState == 3) touchingState = 1;
-		else touchingState = 2;
-		if (touchingState == 1) ghost1.reduceHPBy (1);
-	}
-	else if (ghost2.getSprite()->boundingBox().containsPoint(pointTouched)){
-		if (touchingState == 3) touchingState = 1;
-		else touchingState = 2;
-		if (touchingState == 1) ghost2.reduceHPBy (1);
-	}
-	else if (angel.getSprite()->boundingBox().containsPoint(pointTouched)){
-		if (touchingState == 3) touchingState = 1;
-		else touchingState = 2;
-		if (touchingState == 1) angel.reduceHPBy (1);
-	}
-	else touchingState = 3;
+	bool touching = false;
+	if (touching == false) for (int i=0; i<ghost1Count; i++) if (ghost1[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+			touching = true;
+			if (touchingState == 3) touchingState = 1;
+			else touchingState = 2;
+			if (touchingState == 1) ghost1[i].reduceHPBy (1);
+		}
+	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+			touching = true;
+			if (touchingState == 3) touchingState = 1;
+			else touchingState = 2;
+			if (touchingState == 1) ghost2[i].reduceHPBy (1);
+		}
+	if (touching == false) for (int i=0; i<angelCount; i++)if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+			touching = true;
+			if (touchingState == 3) touchingState = 1;
+			else touchingState = 2;
+			if (touchingState == 1) angel[i].reduceHPBy (1);
+		}
+	if (touching == false) touchingState = 3;
 
 	CCLog ("Moved");
 }
@@ -247,15 +253,24 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
-	angel.move();
+	time--;
+	if (time == 0 && stt <10){
 
-	if (ghost1.getSprite()->getPositionX() >= 80) ghost1.move();
-	else House.reduceHPBy (1);
-	
-	if (ghost2.getSprite()->getPositionX() >= 80) ghost2.move();
-	else House.reduceHPBy (1);
+		time = 60;
+		stt++;
+	}
 
-	if (angel.isDead()) House.reduceHPBy (1);
+	for (int i=0; i<angelCount; i++) angel[i].move();
+	for (int i=0; i<ghost1Count; i++){
+		if (ghost1[i].getSprite()->getPositionX() >= 80) ghost1[i].move();
+		else House.reduceHPBy (1);
+	}
+	for (int i=0; i<ghost2Count; i++){
+		if (ghost2[i].getSprite()->getPositionX() >= 80) ghost2[i].move();
+		else House.reduceHPBy (1);
+	}
+
+	for (int i=0; i<angelCount; i++) if (angel[i].isDead()) House.reduceHPBy (1);
 	
 	if (House.isDead()){
 		GameOverBox->setVisible(true);
