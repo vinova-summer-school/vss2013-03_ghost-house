@@ -13,10 +13,9 @@ using namespace cocos2d;
 
 class GamePlay : public cocos2d::CCLayer
 {
-	short ghost1Count, ghost2Count, angelCount;
+	short ghost1Count, ghost2Count, angelCount; // Numbers of sprites that will be shown
 	ghost1 ghost1[20];
 	ghost2 ghost2[20];
-	House House;
 	angel angel [20];
 
 	int time, stt;
@@ -29,6 +28,7 @@ protected:
 	CCMotionStreak *streak;
 
 public:
+	int HouseHP;
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
 

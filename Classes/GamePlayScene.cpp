@@ -92,14 +92,14 @@ bool GamePlay::init()
 		//////////*** Some in-game items ***////////////////////
 
 		// 4. Add some sprites
-		ghost1Count = 3;
-		ghost2Count = 3;
-		angelCount = 2;
+		ghost1Count = 10;
+		ghost2Count = 10;
+		angelCount = 10;
 		// ghosts
 		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),2);
 		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
+		// angels
 		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),2);
-		// an angel
 
 		//////////////////*** Pause Dialog Box ***////////////////////////
 		// Dialog box
@@ -196,6 +196,7 @@ bool GamePlay::init()
 	scheduleUpdate ();
 
 	time = stt = 0;
+	HouseHP = 50;
 
     return bRet;
 }
@@ -253,26 +254,20 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
-	time--;
-	if (time == 0 && stt <10){
-
+	if (time == 0 && stt < 5){
+		ghost1[stt].getSprite()->setVisible(true);
+		ghost2[stt].getSprite()->setVisible(true);
+		angel[stt].getSprite()->setVisible(true);
 		time = 60;
 		stt++;
 	}
+	time--;
 
-	for (int i=0; i<angelCount; i++) angel[i].move();
-	for (int i=0; i<ghost1Count; i++){
-		if (ghost1[i].getSprite()->getPositionX() >= 80) ghost1[i].move();
-		else House.reduceHPBy (1);
-	}
-	for (int i=0; i<ghost2Count; i++){
-		if (ghost2[i].getSprite()->getPositionX() >= 80) ghost2[i].move();
-		else House.reduceHPBy (1);
-	}
-
-	for (int i=0; i<angelCount; i++) if (angel[i].isDead()) House.reduceHPBy (1);
+	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP);
+	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP);
+	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP);
 	
-	if (House.isDead()){
+	if (HouseHP <= 0){
 		GameOverBox->setVisible(true);
 		CCDirector::sharedDirector()->pause();
 	}
