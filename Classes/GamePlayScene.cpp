@@ -49,7 +49,7 @@ bool GamePlay::init()
 
 		//Game soundtrack
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
-		"Glad You Came.wav",true);
+		"fallen army.wav",true);
 
 
 		////////////////*** Outline Background ***///////////////////////
@@ -98,7 +98,7 @@ bool GamePlay::init()
         this->addChild(pScore, 6);
 
         // Illustrate HouseHP
-		HouseHP = 50;
+		HouseHP = 10;
 		itoa(HouseHP, HHP, 10);
 		pHHP = CCLabelTTF::create(HHP, "Arial", 30);
 		pHHP->setPosition(ccp(50, 290));
