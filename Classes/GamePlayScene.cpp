@@ -1,6 +1,8 @@
 //MAIN GAME PLAY SCENE
 
 #include "GamePlayScene.h"
+#include <stdlib.h>
+#include "cstring"
 
 using namespace cocos2d;
 
@@ -64,19 +66,23 @@ bool GamePlay::init()
 		// Add the menu to GamePlay layer as a child layer
 		this->addChild(pPause, 1);
 
-
-        // 2. Add a score label.
+		// 2. Add a score label.
 		score = 0;
-
-		pScore = CCLabelTTF::create("Score: ", "Arial", 24);
+		itoa(score,Score,10);
+		pScore = CCLabelTTF::create(Score, "Arial", 24);
         CC_BREAK_IF(! pScore);
-
         // place the label upper.
-        pScore->setPosition(ccp(size.width / 2, size.height - 50));
+        pScore->setPosition(ccp(440, 300));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
 
+        // Illustrate HouseHP
+		HouseHP = 50;
+		itoa(HouseHP, HHP, 10);
+		pHHP = CCLabelTTF::create(HHP, "Arial", 30);
+		pHHP->setPosition(ccp(50, 290));
+		this->addChild(pHHP, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
@@ -195,7 +201,6 @@ bool GamePlay::init()
 	scheduleUpdate ();
 
 	time = stt = 0;
-	HouseHP = 50;
 
     return bRet;
 }
@@ -222,10 +227,9 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
-			if (touchingState == 1){
+			if (touchingState == 1)
 				ghost1[i].reduceHPBy (1);
-				score += 20;
-			}
+			if (ghost1[i].isDead()) score += 20;
 		}
 	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
@@ -233,7 +237,8 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			else touchingState = 2;
 			if (touchingState == 1) {
 				ghost2[i].reduceHPBy (1);
-				score += 30;
+			if (ghost2[i].isDead()) score += 30;
+		
 			}
 		}
 	if (touching == false) for (int i=0; i<angelCount; i++)if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
@@ -242,7 +247,8 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			else touchingState = 2;
 			if (touchingState == 1) {
 				angel[i].reduceHPBy (1);
-				score -= 15;
+			if (angel[i].isDead()) score -= 20;
+		
 			}
 		}
 	if (touching == false) touchingState = 3;
@@ -262,6 +268,10 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
+	itoa(HouseHP, HHP, 10);
+	itoa(score,Score,10);
+	pHHP->setString(HHP);
+	pScore->setString(Score);
 	if (time == 0 && stt < 5){
 		ghost1[stt].getSprite()->setVisible(true);
 		ghost2[stt].getSprite()->setVisible(true);
@@ -275,6 +285,8 @@ void GamePlay::update (float pDt){
 	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP);
 	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP);
 	
+	
+
 	if (HouseHP <= 0){
 		GameOverBox->setVisible(true);
 		CCDirector::sharedDirector()->pause();

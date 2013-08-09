@@ -38,7 +38,7 @@ public:
 	}
 
 	// Move the sprite
-	void move (int HouseHP){
+	void move (int &HouseHP){
 		if (Sprite->isVisible()){
 			switch(moveStyle){
 			case 0:
