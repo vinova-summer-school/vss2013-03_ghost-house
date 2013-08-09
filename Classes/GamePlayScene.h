@@ -2,7 +2,6 @@
 #define __GAMEPLAY_SCENE_H__
 //MAIN GAME PLAY SCENE
 
-#include <math.h>
 #include "cocos2d.h"
 #include "Characters.h"
 #include "StartScreenScene.h"
@@ -19,10 +18,13 @@ class GamePlay : public cocos2d::CCLayer
 	angel angel [20];
 
 	int time, stt;
+	int score;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 
 	CCSprite *PauseDialogBox;
 	CCSprite *GameOverBox;
+
+	CCLabelTTF* pScore;
 
 protected:
 	CCMotionStreak *streak;

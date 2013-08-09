@@ -64,21 +64,20 @@ bool GamePlay::init()
 		// Add the menu to GamePlay layer as a child layer
 		this->addChild(pPause, 1);
 
-		/*
-        // 2. Add a label shows "Hello World".
 
-        // Create a label and initialize with string "Hello World".
-        CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 24);
-        CC_BREAK_IF(! pLabel);
+        // 2. Add a score label.
+		score = 0;
 
-        // Get window size and place the label upper. 
-        CCSize size = CCDirector::sharedDirector()->getWinSize();
-        pLabel->setPosition(ccp(size.width / 2, size.height - 50));
+		pScore = CCLabelTTF::create("Score: ", "Arial", 24);
+        CC_BREAK_IF(! pScore);
+
+        // place the label upper.
+        pScore->setPosition(ccp(size.width / 2, size.height - 50));
 
         // Add the label to GamePlay layer as a child layer.
-        this->addChild(pLabel, 1);
-		*/
+        this->addChild(pScore, 6);
 
+		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
         CC_BREAK_IF(! pSprite);
@@ -223,19 +222,28 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
-			if (touchingState == 1) ghost1[i].reduceHPBy (1);
+			if (touchingState == 1){
+				ghost1[i].reduceHPBy (1);
+				score += 20;
+			}
 		}
 	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
-			if (touchingState == 1) ghost2[i].reduceHPBy (1);
+			if (touchingState == 1) {
+				ghost2[i].reduceHPBy (1);
+				score += 30;
+			}
 		}
 	if (touching == false) for (int i=0; i<angelCount; i++)if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
-			if (touchingState == 1) angel[i].reduceHPBy (1);
+			if (touchingState == 1) {
+				angel[i].reduceHPBy (1);
+				score -= 15;
+			}
 		}
 	if (touching == false) touchingState = 3;
 
@@ -258,7 +266,7 @@ void GamePlay::update (float pDt){
 		ghost1[stt].getSprite()->setVisible(true);
 		ghost2[stt].getSprite()->setVisible(true);
 		angel[stt].getSprite()->setVisible(true);
-		time = 60;
+		time = 240;
 		stt++;
 	}
 	time--;
