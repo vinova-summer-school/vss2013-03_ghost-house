@@ -3,6 +3,7 @@
 #include "GamePlayScene.h"
 #include <stdlib.h>
 #include "cstring"
+#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 
@@ -46,6 +47,11 @@ bool GamePlay::init()
 		//Get the sizes
 		CCSize size = CCDirector::sharedDirector()->getWinSize();
 
+		//Game soundtrack
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
+		"Glad You Came.wav",true);
+
+
 		////////////////*** Outline Background ***///////////////////////
 		// 1. Create some menu items
 		// Create the "pause" menu item with a pause icon, it's an auto release object
@@ -65,6 +71,20 @@ bool GamePlay::init()
 
 		// Add the menu to GamePlay layer as a child layer
 		this->addChild(pPause, 1);
+
+		//2.Create ice item
+		CCMenuItemImage *pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+			this,
+			menu_selector(GamePlay::iceEffectCallback));
+		CC_BREAK_IF(! pIceItem);
+
+		pIceItem->setPosition(ccp(size.width - 300 , 255));
+
+		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
+		pIce->setPosition(CCPointZero);
+		CC_BREAK_IF(! pIce);
+
+		this->addChild(pIce, 4);
 
 		// 2. Add a score label.
 		score = 0;
@@ -201,6 +221,8 @@ bool GamePlay::init()
 	scheduleUpdate ();
 
 	time = stt = 0;
+	isFreeze = 0;
+	a=1;
 
     return bRet;
 }
@@ -229,7 +251,8 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			else touchingState = 2;
 			if (touchingState == 1)
 				ghost1[i].reduceHPBy (1);
-			if (ghost1[i].isDead()) score += 20;
+			if (ghost1[i].isDead()) 
+				score += 20;
 		}
 	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
@@ -272,19 +295,26 @@ void GamePlay::update (float pDt){
 	itoa(score,Score,10);
 	pHHP->setString(HHP);
 	pScore->setString(Score);
-	if (time == 0 && stt < 5){
-		ghost1[stt].getSprite()->setVisible(true);
-		ghost2[stt].getSprite()->setVisible(true);
-		angel[stt].getSprite()->setVisible(true);
-		time = 240;
-		stt++;
+	if(!isFreeze) {
+		if (time == 0){
+			ghost1[stt].getSprite()->setVisible(true);
+			ghost2[stt].getSprite()->setVisible(true);
+			angel[stt].getSprite()->setVisible(true);
+			time = 240;
+		}
+		time--;
 	}
-	time--;
-
-	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP);
-	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP);
-	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP);
-	
+	else {
+		a = 0;
+		freezetime--;
+		if(freezetime == 0) {
+			isFreeze = false;
+			a = 1;
+		}
+	}
+		for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,a);
+		for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,a);
+		for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,a);
 	
 
 	if (HouseHP <= 0){
@@ -308,4 +338,9 @@ void GamePlay::menuResumeInPauseBoxCallback(CCObject *pSender){
 void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
 	PauseDialogBox->setVisible(false);
 	CCDirector::sharedDirector()->replaceScene(StartScreen::scene());
+}
+
+void GamePlay::iceEffectCallback(CCObject* pSender){
+	freezetime = 300;
+	isFreeze = true;
 }

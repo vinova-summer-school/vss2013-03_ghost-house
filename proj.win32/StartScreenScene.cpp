@@ -76,7 +76,7 @@ bool StartScreen::init()
         CC_BREAK_IF(! pStartItem);
 
 		//Place the start menu item
-        pStartItem->setPosition(ccp(size.width - 90, 250));
+        pStartItem->setPosition(ccp(size.width - 260, 200));
 
         // Create a menu with the "start" menu item, it's an auto release object.
         CCMenu* pStart = CCMenu::create(pStartItem, NULL);
@@ -95,7 +95,7 @@ bool StartScreen::init()
 			menu_selector(StartScreen::menuPreferencesCallback));
 
 		//Place the Preferences Item
-		pPreferencesItem->setPosition(ccp(size.width - 90, 200));
+		pPreferencesItem->setPosition(ccp(size.width - 130, 150));
 
 		//Create a menu with the "preferences" menu item, it's an auto release object
 		CCMenu* pPreferences = CCMenu::create(pPreferencesItem, NULL);
@@ -109,7 +109,7 @@ bool StartScreen::init()
 
         // 2. Add a label shows "Hello World".
 
-        // Create a label and initialize with string "Hello World".
+       /* // Create a label and initialize with string "Hello World".
         CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 20);
         CC_BREAK_IF(! pLabel);
 
@@ -119,9 +119,9 @@ bool StartScreen::init()
 
         // Add the label to StartScreen layer as a child layer.
         this->addChild(pLabel, 1);
-
+		*/
         // 3. Add add a splash screen
-        CCSprite* pSprite = CCSprite::create("HelloWorld.png");
+        CCSprite* pSprite = CCSprite::create("Ghost_house.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen

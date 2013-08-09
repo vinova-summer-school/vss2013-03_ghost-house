@@ -13,9 +13,11 @@ protected:
 	short initHP, HP;		// Init Health Points and the current one
 	short moveStyle;		// Different move styles
 	CCPoint initPos, pos;	// Init position, current position
-	bool isGhost;			// Determine if the character is a ghost
+	bool isGhost;	// Determine if the character is a ghost
+
 
 public:
+	//int a;
 	// Character initialization
 	void init(){
 		Sprite->setPosition (ccp(480, rand() % 245 + 30));	// Init the position
@@ -23,7 +25,7 @@ public:
 		pos = initPos;										// At first current position is the init one
 		HP = initHP;										// At first current HP is the init one
 		moveStyle = rand () % 4;							// Move style
-		Sprite->setVisible(false);							// At first the sprite is hidden
+		Sprite->setVisible(false);		// At first the sprite is hidden
 	}
 
 	// Get the sprite pointer
@@ -38,27 +40,26 @@ public:
 	}
 
 	// Move the sprite
-	void move (int &HouseHP){
+	void move (int &HouseHP, int &a){
 		if (Sprite->isVisible()){
 			switch(moveStyle){
 			case 0:
-				pos.x -= 1;
+				pos.x -= 1*a;
 				break;
 			case 1:
-				pos.x -= 2;
+				pos.x -= 2*a;
 				break;
 			case 2:
-				pos.x -= 3;
+				pos.x -= 3*a;
 				break;
 			case 3:
-				pos.x -= 1;
+				pos.x -= 1*a;
 				pos.y = initPos.y + 30*sin (0.05*pos.x);
 				break;
 			}
 			Sprite->setPosition(pos);
 		}
 		if (pos.x <= 80 ){
-			Sprite->setVisible(false);
 			init();
 			if (isGhost) HouseHP--;
 		}
