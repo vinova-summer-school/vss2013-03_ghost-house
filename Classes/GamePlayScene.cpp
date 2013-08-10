@@ -50,7 +50,7 @@ bool GamePlay::init()
 		//Game soundtrack
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
 		"fallen army.wav",true);
-
+		
 
 		////////////////*** Outline Background ***///////////////////////
 		// 1. Create some menu items
@@ -234,7 +234,7 @@ bool GamePlay::init()
 		
 
 		///******* This is the streak
-		streak = CCMotionStreak::create(0.4, 3, 10, ccWHITE, "streak.png" );
+		streak = CCMotionStreak::create(0.5, 10, 30, ccWHITE, "thunder.png" );
 		this->addChild(streak);
 		//streak->setPosition( ccp(size.width/2, size.height/2) );
 		streak->setZOrder (4);
@@ -331,7 +331,7 @@ void GamePlay::update (float pDt){
 			ghost1[stt].getSprite()->setVisible(true);
 			ghost2[stt].getSprite()->setVisible(true);
 			angel[stt].getSprite()->setVisible(true);
-			time = 120;
+			time = 80;
 		}
 		time--;
 	}
@@ -369,6 +369,7 @@ void GamePlay::update (float pDt){
 	if (HouseHP <= 0){
 		GameOverBox->setVisible(true);
 		CCDirector::sharedDirector()->pause();
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	}
 }
 
@@ -377,11 +378,13 @@ void GamePlay::menuPauseCallback(CCObject* pSender){
 	//"pause" menu item clicked
 	PauseDialogBox->setVisible(true);
 	CCDirector::sharedDirector()->pause();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
 }
 
 void GamePlay::menuResumeInPauseBoxCallback(CCObject *pSender){
 	PauseDialogBox->setVisible(false);
 	CCDirector::sharedDirector()->resume();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }
 
 void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){

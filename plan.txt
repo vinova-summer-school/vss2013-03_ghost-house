@@ -23,5 +23,4 @@ Implement gameplay & style
 Implement items system
 Level design
 
-
 Tuần 4, Tuần 5, 6: Back up.
