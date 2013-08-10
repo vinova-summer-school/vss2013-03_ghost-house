@@ -17,11 +17,12 @@ class GamePlay : public cocos2d::CCLayer
 	ghost2 ghost2[20];
 	angel angel [20];
 
-	int time, stt, freezetime;
-	int score, a;
+	int time, stt, freezetime, slowtime, rHP, damagetime;
+	int score;
+	float a;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char Score[10], HHP[3];
-	bool isFreeze;
+	bool isFreeze, isSlow, isDamage;
 
 	CCSprite *PauseDialogBox;
 	CCSprite *GameOverBox;
@@ -45,7 +46,8 @@ public:
 	void menuResumeInPauseBoxCallback(CCObject* pSender);
 	void menuMainMenuInPauseBoxCallback(CCObject* pSender);
 	void iceEffectCallback(CCObject* pSender);
-
+	void SlowCallback(CCObject* pSender);
+	void superDamageCallback(CCObject* pSender);
     // implement the "static node()" method manually
 	CREATE_FUNC(GamePlay);
 

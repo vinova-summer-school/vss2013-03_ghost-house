@@ -34,13 +34,13 @@ public:
 	}
 
 	// Reduce its Health Points
-	void reduceHPBy (short HP){
+	void reduceHPBy (int &HP){
 		if (Sprite->isVisible())
 			this->HP -= HP;
 	}
 
 	// Move the sprite
-	void move (int &HouseHP, int &a){
+	void move (int &HouseHP, float &a){
 		if (Sprite->isVisible()){
 			switch(moveStyle){
 			case 0:

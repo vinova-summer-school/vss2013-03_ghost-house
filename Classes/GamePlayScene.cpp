@@ -78,13 +78,40 @@ bool GamePlay::init()
 			menu_selector(GamePlay::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
 
-		pIceItem->setPosition(ccp(size.width - 300 , 255));
+		pIceItem->setPosition(ccp(140 , 300));
 
 		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
 		pIce->setPosition(CCPointZero);
 		CC_BREAK_IF(! pIce);
 
 		this->addChild(pIce, 4);
+
+		//2.1, Create Slow item
+		CCMenuItemImage *pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+			this,
+			menu_selector(GamePlay::SlowCallback));
+		CC_BREAK_IF(! pSlowItem);
+
+		pSlowItem->setPosition(ccp(40 , 300));
+
+		CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
+		pSlow->setPosition(CCPointZero);
+		CC_BREAK_IF(! pSlow);
+
+		this->addChild(pSlow, 4);
+		//2.2, Create a Super Damage Item
+		CCMenuItemImage *psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+			this,
+			menu_selector(GamePlay::superDamageCallback));
+		CC_BREAK_IF(! psuperDamageItem);
+
+		psuperDamageItem->setPosition(ccp(90 , 300));
+
+		CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
+		psuperDamage->setPosition(CCPointZero);
+		CC_BREAK_IF(! psuperDamage);
+
+		this->addChild(psuperDamage, 4);
 
 		// 2. Add a score label.
 		score = 0;
@@ -101,7 +128,7 @@ bool GamePlay::init()
 		HouseHP = 10;
 		itoa(HouseHP, HHP, 10);
 		pHHP = CCLabelTTF::create(HHP, "Arial", 30);
-		pHHP->setPosition(ccp(50, 290));
+		pHHP->setPosition(ccp(50, 250));
 		this->addChild(pHHP, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
@@ -222,7 +249,9 @@ bool GamePlay::init()
 
 	time = stt = 0;
 	isFreeze = 0;
-	a=1;
+	isSlow = false;
+	isDamage = false;
+	a = rHP = 1;
 
     return bRet;
 }
@@ -250,7 +279,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
 			if (touchingState == 1)
-				ghost1[i].reduceHPBy (1);
+				ghost1[i].reduceHPBy (rHP);
 			if (ghost1[i].isDead()) 
 				score += 20;
 		}
@@ -259,7 +288,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
 			if (touchingState == 1) {
-				ghost2[i].reduceHPBy (1);
+				ghost2[i].reduceHPBy (rHP);
 			if (ghost2[i].isDead()) score += 30;
 		
 			}
@@ -269,9 +298,11 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
 			if (touchingState == 1) {
-				angel[i].reduceHPBy (1);
-			if (angel[i].isDead()) score -= 20;
-		
+				angel[i].reduceHPBy (rHP);
+				if (angel[i].isDead()){
+					score -= 20;
+					HouseHP--;
+				}		
 			}
 		}
 	if (touching == false) touchingState = 3;
@@ -295,21 +326,39 @@ void GamePlay::update (float pDt){
 	itoa(score,Score,10);
 	pHHP->setString(HHP);
 	pScore->setString(Score);
-	if(!isFreeze) {
+	if(!isFreeze && !isSlow && !isDamage) {
 		if (time == 0){
 			ghost1[stt].getSprite()->setVisible(true);
 			ghost2[stt].getSprite()->setVisible(true);
 			angel[stt].getSprite()->setVisible(true);
-			time = 240;
+			time = 120;
 		}
 		time--;
 	}
-	else {
+	else if(isFreeze) {
 		a = 0;
 		freezetime--;
 		if(freezetime == 0) {
 			isFreeze = false;
 			a = 1;
+		}
+	}
+
+	else if(isSlow){
+		a= 0.25;
+		slowtime--;
+		if(slowtime == 0){
+			isSlow = false;
+			a = 1;
+		}
+	}
+
+	else{
+		rHP = 100;
+		damagetime--;
+		if(damagetime == 0){
+			isDamage = false;
+			rHP =1;
 		}
 	}
 		for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,a);
@@ -341,6 +390,16 @@ void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
 }
 
 void GamePlay::iceEffectCallback(CCObject* pSender){
-	freezetime = 300;
+	freezetime = 240;
 	isFreeze = true;
+}
+
+void GamePlay::SlowCallback(CCObject* pSender){
+	slowtime = 360;
+	isSlow = true;
+}
+
+void GamePlay::superDamageCallback(CCObject* pSender){
+	damagetime = 240;
+	isDamage = true;
 }
