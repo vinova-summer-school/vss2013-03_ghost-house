@@ -119,7 +119,7 @@ bool GamePlay::init()
 		pScore = CCLabelTTF::create(Score, "Arial", 24);
         CC_BREAK_IF(! pScore);
         // place the label upper.
-        pScore->setPosition(ccp(440, 300));
+        pScore->setPosition(ccp(400, 300));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
@@ -144,9 +144,9 @@ bool GamePlay::init()
 		//////////*** Some in-game items ***////////////////////
 
 		// 4. Add some sprites
-		ghost1Count = 10;
-		ghost2Count = 10;
-		angelCount = 10;
+		ghost1Count = 5;
+		ghost2Count = 5;
+		angelCount = 5;
 		// ghosts
 		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),2);
 		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
@@ -339,12 +339,11 @@ void GamePlay::update (float pDt){
 			time = 60*2;
 			stt++;
 			speedMultipler += (float) 0.05;
-			if (stt == 10) stt = 0;
+			if (stt == 5) stt = 0;
 		}
 		time--;
 	}
 	else if(isFreeze) {
-		speedMultipler = 0;
 		freezetime--;
 		if(freezetime == 0) {
 			isFreeze = false;
@@ -353,7 +352,6 @@ void GamePlay::update (float pDt){
 	}
 
 	else if(isSlow){
-		speedMultipler *= 0.25;
 		slowtime--;
 		if(slowtime == 0){
 			isSlow = false;
@@ -362,7 +360,6 @@ void GamePlay::update (float pDt){
 	}
 
 	else if (isDamage) {
-		rHP = 100;
 		damagetime--;
 		if(damagetime == 0){
 			isDamage = false;
@@ -403,15 +400,18 @@ void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
 
 void GamePlay::iceEffectCallback(CCObject* pSender){
 	freezetime = 60*4;
+	speedMultipler = 0;
 	isFreeze = true;
 }
 
 void GamePlay::SlowCallback(CCObject* pSender){
 	slowtime = 60*6;
+	speedMultipler *= 0.25;
 	isSlow = true;
 }
 
 void GamePlay::superDamageCallback(CCObject* pSender){
 	damagetime = 60*4;
+	rHP = 100;
 	isDamage = true;
 }

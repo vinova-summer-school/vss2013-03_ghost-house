@@ -13,9 +13,9 @@ using namespace cocos2d;
 class GamePlay : public cocos2d::CCLayer
 {
 	short ghost1Count, ghost2Count, angelCount; // Numbers of sprites that will be shown
-	ghost1 ghost1[20];
-	ghost2 ghost2[20];
-	angel angel [20];
+	ghost1 ghost1[5];
+	ghost2 ghost2[5];
+	angel angel [5];
 
 	int time, stt, freezetime, slowtime, rHP, damagetime;
 	int score;
