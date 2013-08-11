@@ -115,7 +115,7 @@ bool GamePlay::init()
 
 		// 2. Add a score label.
 		score = 0;
-		itoa(score,Score,10);
+		_itoa(score,Score,10);
 		pScore = CCLabelTTF::create(Score, "Arial", 24);
         CC_BREAK_IF(! pScore);
         // place the label upper.
@@ -126,7 +126,7 @@ bool GamePlay::init()
 
         // Illustrate HouseHP
 		HouseHP = 10;
-		itoa(HouseHP, HHP, 10);
+		_itoa(HouseHP, HHP, 10);
 		pHHP = CCLabelTTF::create(HHP, "Arial", 30);
 		pHHP->setPosition(ccp(50, 250));
 		this->addChild(pHHP, 6);
@@ -151,7 +151,7 @@ bool GamePlay::init()
 		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),2);
 		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
 		// angels
-		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),2);
+		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),1);
 
 		//////////////////*** Pause Dialog Box ***////////////////////////
 		// Dialog box
@@ -251,7 +251,7 @@ bool GamePlay::init()
 	isFreeze = 0;
 	isSlow = false;
 	isDamage = false;
-	a = rHP = 1;
+	speedMultipler = rHP = 1;
 
     return bRet;
 }
@@ -322,48 +322,57 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
-	itoa(HouseHP, HHP, 10);
-	itoa(score,Score,10);
+	// Number's strings
+	_itoa(HouseHP, HHP, 10);
+	_itoa(score,Score,10);
 	pHHP->setString(HHP);
 	pScore->setString(Score);
+
+	// Effect of in-game items
+
 	if(!isFreeze && !isSlow && !isDamage) {
 		if (time == 0){
 			ghost1[stt].getSprite()->setVisible(true);
 			ghost2[stt].getSprite()->setVisible(true);
 			angel[stt].getSprite()->setVisible(true);
-			time = 80;
+			
+			time = 60*2;
+			stt++;
+			speedMultipler += (float) 0.05;
+			if (stt == 10) stt = 0;
 		}
 		time--;
 	}
 	else if(isFreeze) {
-		a = 0;
+		speedMultipler = 0;
 		freezetime--;
 		if(freezetime == 0) {
 			isFreeze = false;
-			a = 1;
+			speedMultipler = 1;
 		}
 	}
 
 	else if(isSlow){
-		a= 0.25;
+		speedMultipler *= 0.25;
 		slowtime--;
 		if(slowtime == 0){
 			isSlow = false;
-			a = 1;
+			speedMultipler = 1;
 		}
 	}
 
-	else{
+	else if (isDamage) {
 		rHP = 100;
 		damagetime--;
 		if(damagetime == 0){
 			isDamage = false;
-			rHP =1;
+			rHP = 1;
 		}
 	}
-		for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,a);
-		for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,a);
-		for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,a);
+
+	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,speedMultipler);
+	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,speedMultipler);
+	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,speedMultipler);
 	
 
 	if (HouseHP <= 0){
@@ -393,16 +402,16 @@ void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
 }
 
 void GamePlay::iceEffectCallback(CCObject* pSender){
-	freezetime = 240;
+	freezetime = 60*4;
 	isFreeze = true;
 }
 
 void GamePlay::SlowCallback(CCObject* pSender){
-	slowtime = 360;
+	slowtime = 60*6;
 	isSlow = true;
 }
 
 void GamePlay::superDamageCallback(CCObject* pSender){
-	damagetime = 240;
+	damagetime = 60*4;
 	isDamage = true;
 }

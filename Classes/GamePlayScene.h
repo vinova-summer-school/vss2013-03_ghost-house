@@ -19,7 +19,7 @@ class GamePlay : public cocos2d::CCLayer
 
 	int time, stt, freezetime, slowtime, rHP, damagetime;
 	int score;
-	float a;
+	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char Score[10], HHP[3];
 	bool isFreeze, isSlow, isDamage;

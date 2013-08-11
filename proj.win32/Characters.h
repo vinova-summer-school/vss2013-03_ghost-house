@@ -41,20 +41,20 @@ public:
 	}
 
 	// Move the sprite
-	void move (int &HouseHP, float &a){
+	void move (int &HouseHP, const float &speedMultipler){
 		if (Sprite->isVisible()){
 			switch(moveStyle){
 			case 0:
-				pos.x -= 1*a;
+				pos.x -= 1*speedMultipler;
 				break;
 			case 1:
-				pos.x -= 2*a;
+				pos.x -= 2*speedMultipler;
 				break;
 			case 2:
-				pos.x -= 3*a;
+				pos.x -= 3*speedMultipler;
 				break;
 			case 3:
-				pos.x -= 1*a;
+				pos.x -= 1*speedMultipler;
 				pos.y = initPos.y + 30*sin (0.05*pos.x);
 				break;
 			}
