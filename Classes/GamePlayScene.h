@@ -22,7 +22,8 @@ class GamePlay : public cocos2d::CCLayer
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char Score[10], HHP[3];
-	bool isFreeze, isSlow, isDamage;
+
+	bool isFreeze, isSlow, isDamage; // If Freeze, Slow and SuperDamage item is active
 
 	CCSprite *PauseDialogBox;
 	CCSprite *GameOverBox;

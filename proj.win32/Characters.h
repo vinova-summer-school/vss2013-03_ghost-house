@@ -13,7 +13,7 @@ protected:
 	short initHP, HP;		// Init Health Points and the current one
 	short moveStyle;		// Different move styles
 	CCPoint initPos, pos;	// Init position, current position
-	bool isGhost;	// Determine if the character is a ghost
+	bool isGhost;			// Determine if the character is a ghost
 
 
 public:
@@ -25,8 +25,8 @@ public:
 		initPos = Sprite->getPosition();						// Get the init position
 		pos = initPos;										// At first current position is the init one
 		HP = initHP;										// At first current HP is the init one
-		moveStyle = rand() % 4;							// Move style
-		Sprite->setVisible(false);		// At first the sprite is hidden
+		moveStyle = rand() % 4;								// Move style
+		Sprite->setVisible(false);							// At first the sprite is hidden
 	}
 
 	// Get the sprite pointer
@@ -35,7 +35,7 @@ public:
 	}
 
 	// Reduce its Health Points
-	void reduceHPBy (int &HP){
+	void reduceHPBy (const int &HP){
 		if (Sprite->isVisible())
 			this->HP -= HP;
 	}

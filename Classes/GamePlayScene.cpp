@@ -1,8 +1,10 @@
 //MAIN GAME PLAY SCENE
 
 #include "GamePlayScene.h"
+#include "Items.h"
+
 #include <stdlib.h>
-#include "cstring"
+#include <cstring>
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
@@ -293,7 +295,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 		
 			}
 		}
-	if (touching == false) for (int i=0; i<angelCount; i++)if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+	if (touching == false) for (int i=0; i<angelCount; i++) if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
@@ -329,8 +331,12 @@ void GamePlay::update (float pDt){
 	pScore->setString(Score);
 
 	// Effect of in-game items
+	iceUpdate (freezetime, speedMultipler, isFreeze);
+	slowUpdate (slowtime, speedMultipler, isSlow);
+	superDamageUpdate (damagetime, rHP, isDamage);
+	
 
-	if(!isFreeze && !isSlow && !isDamage) {
+	if (!isFreeze) {
 		if (time == 0){
 			ghost1[stt].getSprite()->setVisible(true);
 			ghost2[stt].getSprite()->setVisible(true);
@@ -342,29 +348,6 @@ void GamePlay::update (float pDt){
 			if (stt == 5) stt = 0;
 		}
 		time--;
-	}
-	else if(isFreeze) {
-		freezetime--;
-		if(freezetime == 0) {
-			isFreeze = false;
-			speedMultipler = 1;
-		}
-	}
-
-	else if(isSlow){
-		slowtime--;
-		if(slowtime == 0){
-			isSlow = false;
-			speedMultipler = 1;
-		}
-	}
-
-	else if (isDamage) {
-		damagetime--;
-		if(damagetime == 0){
-			isDamage = false;
-			rHP = 1;
-		}
 	}
 
 	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,speedMultipler);
@@ -399,19 +382,13 @@ void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
 }
 
 void GamePlay::iceEffectCallback(CCObject* pSender){
-	freezetime = 60*4;
-	speedMultipler = 0;
-	isFreeze = true;
+	iceCall (freezetime, speedMultipler, isFreeze);
 }
 
 void GamePlay::SlowCallback(CCObject* pSender){
-	slowtime = 60*6;
-	speedMultipler *= 0.25;
-	isSlow = true;
+	slowCall (slowtime, speedMultipler, isSlow);
 }
 
 void GamePlay::superDamageCallback(CCObject* pSender){
-	damagetime = 60*4;
-	rHP = 100;
-	isDamage = true;
+	superDamageCall (damagetime, rHP, isDamage);
 }
