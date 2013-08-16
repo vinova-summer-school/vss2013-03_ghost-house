@@ -117,21 +117,30 @@ bool GamePlay::init()
 
 		// 2. Add a score label.
 		score = 0;
-		_itoa(score,Score,10);
-		pScore = CCLabelTTF::create(Score, "Arial", 24);
+		_itoa(score, ScoreString, 10);
+		pScore = CCLabelTTF::create(ScoreString, "Arial", 24);
         CC_BREAK_IF(! pScore);
         // place the label upper.
-        pScore->setPosition(ccp(400, 300));
+        pScore->setPosition(ccp(400, 280));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
 
+		// High Score label
+		int highscore = UserHighScore->getIntegerForKey("high_score", 0);
+		_itoa(highscore, HighScoreString, 10);
+
+		pHighScore = CCLabelTTF::create(HighScoreString, "Verdana", 20);
+		CC_BREAK_IF(! pHighScore);
+		pHighScore->setPosition(ccp(400, 300));
+		this->addChild(pHighScore, 4);
+
         // Illustrate HouseHP
-		HouseHP = 10;
-		_itoa(HouseHP, HHP, 10);
-		pHHP = CCLabelTTF::create(HHP, "Arial", 30);
-		pHHP->setPosition(ccp(50, 250));
-		this->addChild(pHHP, 6);
+		HouseHP = 100;
+		_itoa(HouseHP, HPString, 10);
+		pHP = CCLabelTTF::create(HPString, "Arial", 30);
+		pHP->setPosition(ccp(50, 250));
+		this->addChild(pHP, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
@@ -249,6 +258,8 @@ bool GamePlay::init()
 	setTouchEnabled (true);
 	scheduleUpdate ();
 
+	UserHighScore = CCUserDefault::sharedUserDefault();
+
 	time = stt = 0;
 	isFreeze = 0;
 	isSlow = false;
@@ -325,10 +336,10 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 //Using *update* to sprites
 void GamePlay::update (float pDt){
 	// Number's strings
-	_itoa(HouseHP, HHP, 10);
-	_itoa(score,Score,10);
-	pHHP->setString(HHP);
-	pScore->setString(Score);
+	_itoa(HouseHP, HPString, 10);
+	_itoa(score,ScoreString,10);
+	pHP->setString(HPString);
+	pScore->setString(ScoreString);
 
 	// Effect of in-game items
 	iceUpdate (freezetime, speedMultipler, isFreeze);
@@ -357,6 +368,7 @@ void GamePlay::update (float pDt){
 
 	if (HouseHP <= 0){
 		GameOverBox->setVisible(true);
+		UserHighScore->setIntegerForKey("high_score", score);
 		CCDirector::sharedDirector()->pause();
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	}

@@ -21,14 +21,15 @@ class GamePlay : public cocos2d::CCLayer
 	int score;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
-	char Score[10], HHP[3];
+	char ScoreString[10], HighScoreString[10], HPString[3]; // Score and HP in string format
 
 	bool isFreeze, isSlow, isDamage; // If Freeze, Slow and SuperDamage item is active
 
-	CCSprite *PauseDialogBox;
-	CCSprite *GameOverBox;
+	CCSprite *PauseDialogBox; //Pause Dialog Box
+	CCSprite *GameOverBox; // Game Over dialog box
+	CCUserDefault* UserHighScore;
 
-	CCLabelTTF* pScore, *pHHP;
+	CCLabelTTF* pScore, *pHP, *pHighScore;
 
 protected:
 	CCMotionStreak *streak;
