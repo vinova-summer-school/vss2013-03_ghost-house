@@ -17,13 +17,17 @@ class GamePlay : public cocos2d::CCLayer
 	ghost2 ghost2[5];
 	angel angel [5];
 
-	int time, stt, freezetime, slowtime, rHP, damagetime;
+	int time, stt, freezetime, slowtime, rHP, damagetime, freezeRefreshTime, slowRefreshTime, damageRefreshTime;
 	int score, HighScore;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char ScoreString[10], HighScoreString[10], HPString[3]; // Score and HP in string format
 
 	bool isFreeze, isSlow, isDamage; // If Freeze, Slow and SuperDamage item is active
+
+	CCMenuItemImage *pIceItem;
+	CCMenuItemImage *pSlowItem;
+	CCMenuItemImage *psuperDamageItem;
 
 	CCSprite *PauseDialogBox; //Pause Dialog Box
 	CCSprite *GameOverBox; // Game Over dialog box
@@ -36,6 +40,7 @@ protected:
 
 public:
 	int HouseHP;
+	float SpeedLevel;
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
 

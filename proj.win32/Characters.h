@@ -24,7 +24,7 @@ public:
 		initPos = Sprite->getPosition();						// Get the init position
 		pos = initPos;										// At first current position is the init one
 		HP = initHP;										// At first current HP is the init one
-		moveStyle = rand() % 4;								// Move style
+		moveStyle = rand() % 5;								// Move style
 		Sprite->setVisible(false);							// At first the sprite is hidden
 	}
 
@@ -56,6 +56,11 @@ public:
 				pos.x -= 1*speedMultipler;
 				pos.y = initPos.y + 30*sin (0.05*pos.x);
 				break;
+			case 4:
+				pos.x -= 1*speedMultipler;
+				pos.y = initPos.y + 60*sin (0.05*pos.x);
+				break;
+				
 			}
 			Sprite->setPosition(pos);
 		}

@@ -122,7 +122,7 @@ bool GamePlay::init()
 		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),1);
 
 		// Create ice item
-		CCMenuItemImage *pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+		pIceItem = CCMenuItemImage::create("ice.png","ice.png",
 			this,
 			menu_selector(GamePlay::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
@@ -136,7 +136,7 @@ bool GamePlay::init()
 		this->addChild(pIce, 4);
 
 		// Create Slow item
-		CCMenuItemImage *pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+		pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
 			this,
 			menu_selector(GamePlay::SlowCallback));
 		CC_BREAK_IF(! pSlowItem);
@@ -149,7 +149,7 @@ bool GamePlay::init()
 
 		this->addChild(pSlow, 4);
 		// Create a Super Damage Item
-		CCMenuItemImage *psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+		psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
 			this,
 			menu_selector(GamePlay::superDamageCallback));
 		CC_BREAK_IF(! psuperDamageItem);
@@ -263,6 +263,8 @@ bool GamePlay::init()
 	isSlow = false;
 	isDamage = false;
 	speedMultipler = rHP = 1;
+	SpeedLevel = 3;
+	freezeRefreshTime = 0;
 
     return bRet;
 }
@@ -349,7 +351,8 @@ void GamePlay::update (float pDt){
 			ghost2[stt].getSprite()->setVisible(true);
 			angel[stt].getSprite()->setVisible(true);
 			
-			time = 60*2;
+			if (SpeedLevel > 0.5) SpeedLevel -= 0.075;
+			time = 60*SpeedLevel;
 			stt++;
 			speedMultipler += (float) 0.05;
 			if (stt == 5) stt = 0;

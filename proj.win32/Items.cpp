@@ -2,23 +2,31 @@
 
 // Ice item on call
 void GamePlay::iceEffectCallback(CCObject* pSender){
-	freezetime = 60*4;
-	speedMultipler = 0;
-	for (int i = 0; i<ghost1Count; i++) ghost1[i].getSprite()->setColor(ccc3(50,50,255));
-	for (int i = 0; i<ghost2Count; i++) ghost2[i].getSprite()->setColor(ccc3(50,50,255));
-	isFreeze = true;
+	if (freezeRefreshTime == 0){
+		freezetime = 60*4;
+		freezeRefreshTime = 60*5;
+		pIceItem->setOpacity (100);
+		speedMultipler = 0;
+		for (int i = 0; i<ghost1Count; i++) ghost1[i].getSprite()->setColor(ccc3(50,50,255));
+		for (int i = 0; i<ghost2Count; i++) ghost2[i].getSprite()->setColor(ccc3(50,50,255));
+		isFreeze = true;
+	}
 }
 
 // Ice item on updating
 void GamePlay::iceUpdate (){
 	if (isFreeze) {
 		freezetime--;
-		if(freezetime == 0) {
+		if(freezetime == 0){
 			for (int i = 0; i<ghost1Count; i++) ghost1[i].getSprite()->setColor(ccc3(255,255,255));
 			for (int i = 0; i<ghost2Count; i++) ghost2[i].getSprite()->setColor(ccc3(255,255,255));
 			speedMultipler = 1;
 			isFreeze = false;
 		}
+	}
+	else {
+		if (freezeRefreshTime > 0) freezeRefreshTime--;
+		else pIceItem->setOpacity (255);
 	}
 }
 
