@@ -150,7 +150,9 @@
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\GamePlayScene.h" />
     <ClInclude Include="Characters.h" />
-    <ClInclude Include="Items.h" />
+    <ClCompile Include="Items.cpp">
+      <FileType>CppHeader</FileType>
+    </ClCompile>
     <ClInclude Include="main.h" />
     <ClInclude Include="PreferencesScene.h" />
     <ClInclude Include="resource.h" />

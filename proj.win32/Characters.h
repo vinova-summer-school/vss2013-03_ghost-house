@@ -20,7 +20,6 @@ public:
 	//int a;
 	// Character initialization
 	void init(){
-		//Sprite->setColor(ccc3(0,0,255));
 		Sprite->setPosition (ccp(520, rand() % 245 + 30));	// Init the position
 		initPos = Sprite->getPosition();						// Get the init position
 		pos = initPos;										// At first current position is the init one

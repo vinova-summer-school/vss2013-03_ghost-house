@@ -115,9 +115,6 @@
     <ClInclude Include="Characters.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>include</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -133,6 +130,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="PreferencesScene.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,7 +18,7 @@ class GamePlay : public cocos2d::CCLayer
 	angel angel [5];
 
 	int time, stt, freezetime, slowtime, rHP, damagetime;
-	int score;
+	int score, HighScore;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char ScoreString[10], HighScoreString[10], HPString[3]; // Score and HP in string format
@@ -42,14 +42,15 @@ public:
     // there's no 'id' in cpp, so we recommand to return the exactly class pointer
     static cocos2d::CCScene* scene();
     
-    // a selector callback
-    //void menuCloseCallback(CCObject* pSender);
-	void menuPauseCallback(CCObject* pSender);
-	void menuResumeInPauseBoxCallback(CCObject* pSender);
-	void menuMainMenuInPauseBoxCallback(CCObject* pSender);
-	void iceEffectCallback(CCObject* pSender);
-	void SlowCallback(CCObject* pSender);
-	void superDamageCallback(CCObject* pSender);
+    // Menu items callback
+	void menuPauseCallback(CCObject* pSender);				// Pause button
+	void menuResumeInPauseBoxCallback(CCObject* pSender);	// Resume Button in the Pause Dialog box
+	void menuMainMenuInPauseBoxCallback(CCObject* pSender);	// Main menu button in the Pause Dialog box
+
+	void iceEffectCallback(CCObject* pSender);				// Ice item
+	void SlowCallback(CCObject* pSender);					// Slow item
+	void superDamageCallback(CCObject* pSender);			// Super Damage item
+
     // implement the "static node()" method manually
 	CREATE_FUNC(GamePlay);
 
@@ -57,7 +58,11 @@ public:
 	void ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
 	void ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 
+	// Update on every frame
 	void update (float pDt);
+	void iceUpdate ();			// Controls Ice item
+	void slowUpdate ();			// Controls Slow item
+	void superDamageUpdate ();	// Controls Super Damage item
 
 };
 
