@@ -17,7 +17,10 @@ class GamePlay : public cocos2d::CCLayer
 	ghost2 ghost2[5];
 	angel angel [5];
 
-	int time, stt, freezetime, slowtime, rHP, damagetime, freezeRefreshTime, slowRefreshTime, damageRefreshTime;
+	int HouseHP;
+	float IntervalMultipler;
+	int time, stt;
+	int freezetime, slowtime, rHP, damagetime, freezeRefreshTime, slowRefreshTime, damageRefreshTime;
 	int score, HighScore;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
@@ -39,8 +42,6 @@ protected:
 	CCMotionStreak *streak;
 
 public:
-	int HouseHP;
-	float SpeedLevel;
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
 

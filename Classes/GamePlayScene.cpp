@@ -94,7 +94,7 @@ bool GamePlay::init()
 		this->addChild(pHighScore, 4);
 
         // House Health Points
-		HouseHP = 10;
+		HouseHP = 30;
 		_itoa(HouseHP, HPString, 10);
 		pHP = CCLabelTTF::create(HPString, "Arial", 30);
 		pHP->setPosition(ccp(50, 250));
@@ -259,12 +259,17 @@ bool GamePlay::init()
 	UserHighScore = CCUserDefault::sharedUserDefault();
 
 	time = stt = 0;
-	isFreeze = 0;
-	isSlow = false;
-	isDamage = false;
-	speedMultipler = rHP = 1;
-	SpeedLevel = 3;
+
+	isFreeze = false;
 	freezeRefreshTime = 0;
+	isSlow = false;
+	slowRefreshTime = 0;
+	isDamage = false;
+	damageRefreshTime = 0;
+
+	speedMultipler = rHP = 1;
+	IntervalMultipler = 3;
+
 
     return bRet;
 }
@@ -351,15 +356,15 @@ void GamePlay::update (float pDt){
 			ghost2[stt].getSprite()->setVisible(true);
 			angel[stt].getSprite()->setVisible(true);
 			
-			if (SpeedLevel > 0.5) SpeedLevel -= 0.075;
-			time = 60*SpeedLevel;
+			if (IntervalMultipler > 0.5) IntervalMultipler -= (float) 0.075;
+			time = 60*IntervalMultipler;
 			stt++;
 			speedMultipler += (float) 0.05;
 			if (stt == 5) stt = 0;
 		}
 		time--;
 	}
-
+	// NO WAY TO ACCESS THAT FUCKING HOUSEHP OUTSIDE CLASS SO WE HAVE TO PASS THESE PARAMETERS
 	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,1);
 	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,speedMultipler);
 	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,speedMultipler);
