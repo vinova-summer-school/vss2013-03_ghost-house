@@ -33,7 +33,7 @@ void GamePlay::iceUpdate (){
 // Slow item on call
 void GamePlay::SlowCallback(CCObject* pSender){
 	if (slowRefreshTime == 0){
-		slowRefreshTime = 60*8;
+		slowRefreshTime = 60*12;
 		pSlowItem->setOpacity (100);
 		slowtime = 60*4;
 		speedMultipler = 0.25;
@@ -63,7 +63,7 @@ void GamePlay::slowUpdate (){
 // Super Damage item on call
 void GamePlay::superDamageCallback(CCObject* pSender){
 	if (damageRefreshTime == 0){
-		damageRefreshTime = 60*8;
+		damageRefreshTime = 60*15;
 		psuperDamageItem->setOpacity (100);
 		damagetime = 60*4;
 		rHP = 100;

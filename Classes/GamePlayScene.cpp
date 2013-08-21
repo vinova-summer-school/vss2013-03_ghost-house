@@ -74,31 +74,45 @@ bool GamePlay::init()
 		this->addChild(pPause, 1);
 
 		// 2. Add a score label.
+		strcpy (ScoreString, "Score: ");
 		score = 0;
-		_itoa(score, ScoreString, 10);
-		pScore = CCLabelTTF::create(ScoreString, "Arial", 24);
+		_itoa(score, ScoreString + 7, 10);
+
+		pScore = CCLabelTTF::create(ScoreString, "Calibri", 20);
         CC_BREAK_IF(! pScore);
         // place the label upper.
-        pScore->setPosition(ccp(400, 280));
+		pScore->setPosition(ccp(size.width - 110, size.height - 40));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
 
 		// High Score label
+		strcpy (HighScoreString, "High: ");
 		HighScore = UserHighScore->getIntegerForKey("high_score", 0);
-		_itoa(HighScore, HighScoreString, 10);
+		_itoa(HighScore, HighScoreString + 6, 10);
 
-		pHighScore = CCLabelTTF::create(HighScoreString, "Verdana", 20);
+		pHighScore = CCLabelTTF::create(HighScoreString, "Calibri", 18);
 		CC_BREAK_IF(! pHighScore);
-		pHighScore->setPosition(ccp(400, 300));
+		pHighScore->setPosition(ccp(size.width - 110, size.height - 20));
 		this->addChild(pHighScore, 4);
 
         // House Health Points
-		HouseHP = 30;
-		_itoa(HouseHP, HPString, 10);
-		pHP = CCLabelTTF::create(HPString, "Arial", 30);
-		pHP->setPosition(ccp(50, 250));
+		strcpy (HPString, "HP: ");
+		HouseHP = 10;
+		_itoa(HouseHP, HPString + 4, 10);
+
+		pHP = CCLabelTTF::create(HPString, "Calibri", 20);
+		pHP->setPosition(ccp(50, size.height / 1.3));
 		this->addChild(pHP, 6);
+
+		// Level
+		strcpy (LevelString, "Level: ");
+		level = 0;
+		_itoa(level, LevelString + 7, 10);
+
+		pLevel = CCLabelTTF::create(LevelString, "Calibri", 18);
+		pLevel->setPosition(ccp(size.width - 40, 20));
+		this->addChild(pLevel, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
@@ -127,7 +141,7 @@ bool GamePlay::init()
 			menu_selector(GamePlay::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
 
-		pIceItem->setPosition(ccp(140 , 300));
+		pIceItem->setPosition(ccp(140, size.height - 20));
 
 		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
 		pIce->setPosition(CCPointZero);
@@ -141,7 +155,7 @@ bool GamePlay::init()
 			menu_selector(GamePlay::SlowCallback));
 		CC_BREAK_IF(! pSlowItem);
 
-		pSlowItem->setPosition(ccp(40 , 300));
+		pSlowItem->setPosition(ccp(40, size.height - 20));
 
 		CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
 		pSlow->setPosition(CCPointZero);
@@ -154,7 +168,7 @@ bool GamePlay::init()
 			menu_selector(GamePlay::superDamageCallback));
 		CC_BREAK_IF(! psuperDamageItem);
 
-		psuperDamageItem->setPosition(ccp(90 , 300));
+		psuperDamageItem->setPosition(ccp(90 , size.height - 20));
 
 		CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
 		psuperDamage->setPosition(CCPointZero);
@@ -268,7 +282,7 @@ bool GamePlay::init()
 	damageRefreshTime = 0;
 
 	speedMultipler = rHP = 1;
-	IntervalMultipler = 3;
+	IntervalMultipler = 2;
 
 
     return bRet;
@@ -296,10 +310,10 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			touching = true;
 			if (touchingState == 3) touchingState = 1;
 			else touchingState = 2;
-			if (touchingState == 1)
+			if (touchingState == 1){
 				ghost1[i].reduceHPBy (rHP);
-			if (ghost1[i].isDead()) 
-				score += 20;
+				if (ghost1[i].isDead()) score += 20;
+			}
 		}
 	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
 			touching = true;
@@ -307,8 +321,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			else touchingState = 2;
 			if (touchingState == 1) {
 				ghost2[i].reduceHPBy (rHP);
-			if (ghost2[i].isDead()) score += 30;
-		
+				if (ghost2[i].isDead()) score += 30;
 			}
 		}
 	if (touching == false) for (int i=0; i<angelCount; i++) if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
@@ -317,10 +330,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 			else touchingState = 2;
 			if (touchingState == 1) {
 				angel[i].reduceHPBy (rHP);
-				if (angel[i].isDead()){
-					score -= 20;
-					HouseHP--;
-				}		
+				if (angel[i].isDead()) score -= 20;
 			}
 		}
 	if (touching == false) touchingState = 3;
@@ -339,10 +349,12 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 //Using *update* to sprites
 void GamePlay::update (float pDt){
 	// Number's strings
-	_itoa(HouseHP, HPString, 10);
-	_itoa(score,ScoreString,10);
+	_itoa (HouseHP, HPString + 4, 10);
+	_itoa (score, ScoreString + 7, 10);
+	_itoa (level, LevelString + 7, 10);
 	pHP->setString(HPString);
 	pScore->setString(ScoreString);
+	pLevel->setString(LevelString);
 
 	// Effect of in-game items
 	iceUpdate ();
@@ -352,14 +364,19 @@ void GamePlay::update (float pDt){
 
 	if (!isFreeze) {
 		if (time == 0){
-			ghost1[stt].getSprite()->setVisible(true);
-			ghost2[stt].getSprite()->setVisible(true);
-			angel[stt].getSprite()->setVisible(true);
+			int random = rand() % 100 + 1; // get a random number from 1 to 100
+
+			// set the chance rate for each character to be summonned
+			if (random >= 1 && random <= 50) ghost1[stt].getSprite()->setVisible(true);
+			if (random >= 31 && random <= 80) ghost2[stt].getSprite()->setVisible(true);
+			if (random >= 81 && random <= 100) angel[stt].getSprite()->setVisible(true);
 			
-			if (IntervalMultipler > 0.5) IntervalMultipler -= (float) 0.075;
+			if (IntervalMultipler >= 0.4) IntervalMultipler -= (float) 0.02;
 			time = 60*IntervalMultipler;
 			stt++;
-			speedMultipler += (float) 0.05;
+			level++;
+			score += 5;
+			if (speedMultipler <= 2.5) speedMultipler += (float) 0.025;
 			if (stt == 5) stt = 0;
 		}
 		time--;

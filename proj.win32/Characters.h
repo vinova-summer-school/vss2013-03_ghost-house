@@ -50,15 +50,15 @@ public:
 				pos.x -= 2*speedMultipler;
 				break;
 			case 2:
-				pos.x -= 3*speedMultipler;
+				pos.x -= 2.5*speedMultipler;
 				break;
 			case 3:
 				pos.x -= 1*speedMultipler;
-				pos.y = initPos.y + 30*sin (0.05*pos.x);
+				pos.y = initPos.y + 15*sin (0.05*pos.x);
 				break;
 			case 4:
 				pos.x -= 1*speedMultipler;
-				pos.y = initPos.y + 60*sin (0.05*pos.x);
+				pos.y = initPos.y + 30*sin (0.025*pos.x);
 				break;
 				
 			}
@@ -68,7 +68,10 @@ public:
 			init();
 			if (isGhost) HouseHP--;
 		}
-		if (HP <= 0) init();
+		if (HP <= 0){
+			init();
+			if (!isGhost) HouseHP--;
+		}
 	}
 
 	// Determine if the character is dead
