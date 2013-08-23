@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "Characters.h"
 #include "StartScreenScene.h"
+#include "PauseLayer.h"
 
 #include "SimpleAudioEngine.h"
 
@@ -19,22 +20,27 @@ class GamePlay : public cocos2d::CCLayer
 
 	int HouseHP;
 	float IntervalMultipler;
-	int time, stt, level;
+	int time, stt, level, tmpLevel;
 	int freezetime, slowtime, rHP, damagetime, freezeRefreshTime, slowRefreshTime, damageRefreshTime;
 	int score, HighScore;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
 	char ScoreString[14], HighScoreString[19], HPString[8], LevelString[11]; // Score and HP in string format
+	short first_item, second_item;
 
 	bool isFreeze, isSlow, isDamage; // If Freeze, Slow and SuperDamage item is active
 
+	PauseLayer *pauseLayer;
+
+	CCMenuItemImage *pRecoveryHP;
+
+	CCMenuItemImage *pPauseItem;
 	CCMenuItemImage *pIceItem;
 	CCMenuItemImage *pSlowItem;
 	CCMenuItemImage *psuperDamageItem;
 
-	CCSprite *PauseDialogBox; //Pause Dialog Box
 	CCSprite *GameOverBox; // Game Over dialog box
-	CCUserDefault* UserHighScore;
+	CCUserDefault* UserDefault;
 
 	CCLabelTTF* pScore, *pHP, *pHighScore, *pLevel;
 
@@ -50,9 +56,8 @@ public:
     
     // Menu items callback
 	void menuPauseCallback(CCObject* pSender);				// Pause button
-	void menuResumeInPauseBoxCallback(CCObject* pSender);	// Resume Button in the Pause Dialog box
-	void menuMainMenuInPauseBoxCallback(CCObject* pSender);	// Main menu button in the Pause Dialog box
 
+	void RecoveryHPCallback(CCObject* pSender);
 	void iceEffectCallback(CCObject* pSender);				// Ice item
 	void SlowCallback(CCObject* pSender);					// Slow item
 	void superDamageCallback(CCObject* pSender);			// Super Damage item

@@ -4,26 +4,27 @@
 
 #include <stdlib.h>
 #include <cstring>
-#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 
 CCScene* GamePlay::scene()
 {
     CCScene * scene = NULL;
-    do 
-    {
-        // 'scene' is an autorelease object
-        scene = CCScene::create();
-        CC_BREAK_IF(! scene);
 
-        // 'layer' is an autorelease object
-        GamePlay *layer = GamePlay::create();
-        CC_BREAK_IF(! layer);
+    // 'scene' is an autorelease object
+    scene = CCScene::create();
+        
+    // 'layer' is an autorelease object
+    GamePlay *layer = GamePlay::create();
+	layer->pauseLayer = PauseLayer::create();
+	layer->pauseLayer->setVisible(false);
+    
+	layer->pauseLayer->gameLayer = layer;
+	//layer->pauseLayer->pauseLayer = layer->pauseLayer;
 
-        // add layer as a child to scene
-        scene->addChild(layer);
-    } while (0);
+    // add layer as a child to scene
+    scene->addChild(layer,0);
+	scene->addChild(layer->pauseLayer,7);
 
     // return the scene
     return scene;
@@ -56,7 +57,7 @@ bool GamePlay::init()
 		////////////////*** Outline Background ***///////////////////////
 		// 1. Create some menu items
 		// Create the "pause" menu item with a pause icon, it's an auto release object
-		CCMenuItemImage *pPauseItem = CCMenuItemImage::create("PauseButton.png",
+		pPauseItem = CCMenuItemImage::create("PauseButton.png",
 			"PauseButtonSelected.png",
 			this,
 			menu_selector(GamePlay::menuPauseCallback));
@@ -74,9 +75,8 @@ bool GamePlay::init()
 		this->addChild(pPause, 1);
 
 		// 2. Add a score label.
-		strcpy (ScoreString, "Score: ");
 		score = 0;
-		_itoa(score, ScoreString + 7, 10);
+		sprintf(ScoreString, "Score : %d", score);
 
 		pScore = CCLabelTTF::create(ScoreString, "Calibri", 20);
         CC_BREAK_IF(! pScore);
@@ -87,9 +87,8 @@ bool GamePlay::init()
         this->addChild(pScore, 6);
 
 		// High Score label
-		strcpy (HighScoreString, "High: ");
-		HighScore = UserHighScore->getIntegerForKey("high_score", 0);
-		_itoa(HighScore, HighScoreString + 6, 10);
+		HighScore = UserDefault->getIntegerForKey("high_score", 0);
+		sprintf (HighScoreString, "High: %d", HighScore);
 
 		pHighScore = CCLabelTTF::create(HighScoreString, "Calibri", 18);
 		CC_BREAK_IF(! pHighScore);
@@ -97,18 +96,16 @@ bool GamePlay::init()
 		this->addChild(pHighScore, 4);
 
         // House Health Points
-		strcpy (HPString, "HP: ");
 		HouseHP = 10;
-		_itoa(HouseHP, HPString + 4, 10);
+		sprintf (HPString, "HP: %d", HouseHP);
 
 		pHP = CCLabelTTF::create(HPString, "Calibri", 20);
 		pHP->setPosition(ccp(50, size.height / 1.3));
 		this->addChild(pHP, 6);
 
 		// Level
-		strcpy (LevelString, "Level: ");
 		level = 0;
-		_itoa(level, LevelString + 7, 10);
+		sprintf (LevelString, "Level: %d", level);
 
 		pLevel = CCLabelTTF::create(LevelString, "Calibri", 18);
 		pLevel->setPosition(ccp(size.width - 40, 20));
@@ -134,90 +131,71 @@ bool GamePlay::init()
 		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
 		// angels
 		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),1);
+	
+		first_item = UserDefault->getIntegerForKey("first_item", 0);
+		second_item = UserDefault->getIntegerForKey("second_item", 0);
 
-		// Create ice item
-		pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+		//"star"
+		pRecoveryHP = CCMenuItemImage::create("Powerstar.png", "star.png",
 			this,
-			menu_selector(GamePlay::iceEffectCallback));
-		CC_BREAK_IF(! pIceItem);
+			menu_selector(GamePlay::RecoveryHPCallback));
+		CC_BREAK_IF (!pRecoveryHP);
+//		pRecoveryHP->setPosition(rand()%200+100, rand()%260+25);
+		CCMenu *pRecovery = CCMenu::create(pRecoveryHP,NULL);
+		pRecovery->setPosition(CCPointZero);
+		CC_BREAK_IF(!pRecovery);
+		this->addChild(pRecovery,4);
 
-		pIceItem->setPosition(ccp(140, size.height - 20));
+		if (first_item == 3 || second_item == 3){
+			// Create ice item
+			pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+				this,
+				menu_selector(GamePlay::iceEffectCallback));
+			CC_BREAK_IF(! pIceItem);
 
-		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
-		pIce->setPosition(CCPointZero);
-		CC_BREAK_IF(! pIce);
+			if (first_item == 3) pIceItem->setPosition(ccp(40, size.height - 20));
+			else if (second_item == 3) pIceItem->setPosition(ccp(90, size.height - 20));
 
-		this->addChild(pIce, 4);
+			CCMenu* pIce = CCMenu::create(pIceItem,NULL);
+			pIce->setPosition(CCPointZero);
+			CC_BREAK_IF(! pIce);
 
-		// Create Slow item
-		pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
-			this,
-			menu_selector(GamePlay::SlowCallback));
-		CC_BREAK_IF(! pSlowItem);
+			this->addChild(pIce, 4);
+		}
 
-		pSlowItem->setPosition(ccp(40, size.height - 20));
+		if (first_item == 1 || second_item == 1){
+			// Create Slow item
+			pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+				this,
+				menu_selector(GamePlay::SlowCallback));
+			CC_BREAK_IF(! pSlowItem);
 
-		CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
-		pSlow->setPosition(CCPointZero);
-		CC_BREAK_IF(! pSlow);
+			if (first_item == 1) pSlowItem->setPosition(ccp(40, size.height - 20));
+			else if (second_item == 1) pSlowItem->setPosition(ccp(90, size.height - 20));
 
-		this->addChild(pSlow, 4);
-		// Create a Super Damage Item
-		psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
-			this,
-			menu_selector(GamePlay::superDamageCallback));
-		CC_BREAK_IF(! psuperDamageItem);
+			CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
+			pSlow->setPosition(CCPointZero);
+			CC_BREAK_IF(! pSlow);
 
-		psuperDamageItem->setPosition(ccp(90 , size.height - 20));
+			this->addChild(pSlow, 4);
+		}
 
-		CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
-		psuperDamage->setPosition(CCPointZero);
-		CC_BREAK_IF(! psuperDamage);
+		if (first_item == 2 || second_item == 2){
+			// Create a Super Damage Item
+			psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+				this,
+				menu_selector(GamePlay::superDamageCallback));
+			CC_BREAK_IF(! psuperDamageItem);
 
-		this->addChild(psuperDamage, 4);
+			if (first_item == 2) psuperDamageItem->setPosition(ccp(40, size.height - 20));
+			else if (second_item == 2) psuperDamageItem->setPosition(ccp(90, size.height - 20));
 
-		//////////////////*** Pause Dialog Box ***////////////////////////
-		// Dialog box
-		PauseDialogBox = CCSprite::create("PauseDialogBox.png");
-		CC_BREAK_IF(! PauseDialogBox);
-		PauseDialogBox->setPosition(ccp(size.width/2, size.height/2));
-		this->addChild(PauseDialogBox,3);
-		PauseDialogBox->setVisible(false);
+			CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
+			psuperDamage->setPosition(CCPointZero);
+			CC_BREAK_IF(! psuperDamage);
 
-		// A resume button as a menu item
-		CCMenuItemImage *pPauseBox_ResumeItem = CCMenuItemImage::create(
-			"PauseBox_ResumeButton.png",
-			"PauseBox_ResumeButtonSelected.png",
-			this,
-			menu_selector(GamePlay::menuResumeInPauseBoxCallback));
-		CC_BREAK_IF(! pPauseBox_ResumeItem);
-
-		pPauseBox_ResumeItem->setPosition(ccp(size.width/2 - 100, size.height/2 - 110));
-
-		CCMenu *pPauseBox_Resume = CCMenu::create(pPauseBox_ResumeItem, NULL);
-		pPauseBox_Resume->setPosition(CCPointZero);
-		CC_BREAK_IF(! pPauseBox_Resume);
-
-		PauseDialogBox->addChild(pPauseBox_Resume);
-
-		// A Back button as a menu item
-		CCMenuItemImage *pPauseBox_MainMenuItem = CCMenuItemImage::create(
-			"MainMenuButton.png",
-			"MainMenuButtonSelected.png",
-			this,
-			menu_selector(GamePlay::menuMainMenuInPauseBoxCallback));
-		CC_BREAK_IF(! pPauseBox_MainMenuItem);
-
-		pPauseBox_MainMenuItem->setPosition(ccp(size.width - 200, size.height - 200));
-
-		CCMenu *pPauseBox_MainMenu = CCMenu::create(pPauseBox_MainMenuItem, NULL);
-		pPauseBox_MainMenu->setPosition(CCPointZero);
-		CC_BREAK_IF(! pPauseBox_MainMenu);
-
-		PauseDialogBox->addChild(pPauseBox_MainMenu);
-
-		////////*** END OF PAUSE DIALOG BOX ***////////////////////////////
-
+			this->addChild(psuperDamage, 4);
+		}
 
 		/////////////*** GAME OVER BOX ***/////////////////////
 		GameOverBox = CCSprite::create("GameOverBox.png");
@@ -230,7 +208,7 @@ bool GamePlay::init()
 			"MainMenuButton.png",
 			"MainMenuButtonSelected.png",
 			this,
-			menu_selector(GamePlay::menuMainMenuInPauseBoxCallback));
+			menu_selector(PauseLayer::menuMainMenuCallback));
 		CC_BREAK_IF(! pOverBox_MainMenuItem);
 
 		pOverBox_MainMenuItem->setPosition(ccp(size.width - 300, size.height - 250));
@@ -270,10 +248,10 @@ bool GamePlay::init()
 	setTouchEnabled (true);
 	scheduleUpdate ();
 
-	UserHighScore = CCUserDefault::sharedUserDefault();
+	UserDefault = CCUserDefault::sharedUserDefault();
 
 	time = stt = 0;
-
+	tmpLevel = -1;
 	isFreeze = false;
 	freezeRefreshTime = 0;
 	isSlow = false;
@@ -292,47 +270,52 @@ bool GamePlay::init()
 //Using touch-related functions applied to sprites
 
 void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
-	
-	///*********** Apply the streak
-	CCSetIterator it = pTouches->begin();
-    CCTouch* _touch = (CCTouch*)(*it);
-    CCPoint touchLocation = _touch->getLocation();
-    streak->setPosition( touchLocation );
-	
 	////******* Get the touching point
 	CCTouch *touch = (CCTouch *)pTouches->anyObject();
 	CCPoint pointTouched = touch->getLocationInView();
 	pointTouched = CCDirector::sharedDirector()->convertToGL(pointTouched);
+	
+	///*********** Apply the streak
+	streak->setPosition( pointTouched );
 
 	////// if a sprite contains the touching point
 	bool touching = false;
-	if (touching == false) for (int i=0; i<ghost1Count; i++) if (ghost1[i].getSprite()->boundingBox().containsPoint(pointTouched)){
-			touching = true;
-			if (touchingState == 3) touchingState = 1;
-			else touchingState = 2;
-			if (touchingState == 1){
-				ghost1[i].reduceHPBy (rHP);
-				if (ghost1[i].isDead()) score += 20;
+	if (touching == false) 
+		for (int i=0; i<ghost1Count; i++) 
+			if (ghost1[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+				touching = true;
+				if (touchingState == 3) touchingState = 1;
+				else touchingState = 2;
+				if (touchingState == 1){
+					ghost1[i].reduceHPBy (rHP);
+					if (ghost1[i].isDead()) score += 20;
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+				}
 			}
-		}
-	if (touching == false) for (int i=0; i<ghost2Count; i++) if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
-			touching = true;
-			if (touchingState == 3) touchingState = 1;
-			else touchingState = 2;
-			if (touchingState == 1) {
-				ghost2[i].reduceHPBy (rHP);
-				if (ghost2[i].isDead()) score += 30;
+	if (touching == false)
+		for (int i=0; i<ghost2Count; i++)
+			if (ghost2[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+				touching = true;
+				if (touchingState == 3) touchingState = 1;
+				else touchingState = 2;
+				if (touchingState == 1) {
+					ghost2[i].reduceHPBy (rHP);
+					if (ghost2[i].isDead()) score += 30;
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+				}
 			}
-		}
-	if (touching == false) for (int i=0; i<angelCount; i++) if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
-			touching = true;
-			if (touchingState == 3) touchingState = 1;
-			else touchingState = 2;
-			if (touchingState == 1) {
-				angel[i].reduceHPBy (rHP);
-				if (angel[i].isDead()) score -= 20;
+	if (touching == false)
+		for (int i=0; i<angelCount; i++)
+			if (angel[i].getSprite()->boundingBox().containsPoint(pointTouched)){
+				touching = true;
+				if (touchingState == 3) touchingState = 1;
+				else touchingState = 2;
+				if (touchingState == 1) {
+					angel[i].reduceHPBy (rHP);
+					if (angel[i].isDead()) score -= 20;
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+				}
 			}
-		}
 	if (touching == false) touchingState = 3;
 
 }
@@ -348,30 +331,34 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 
 //Using *update* to sprites
 void GamePlay::update (float pDt){
+	//setAllButtonsEnabled (true);
 	// Number's strings
-	_itoa (HouseHP, HPString + 4, 10);
-	_itoa (score, ScoreString + 7, 10);
-	_itoa (level, LevelString + 7, 10);
+	sprintf (HPString, "HP: %d", HouseHP);
+	sprintf (ScoreString, "Score: %d", score);
+	sprintf (LevelString, "Level: %d", level);
 	pHP->setString(HPString);
 	pScore->setString(ScoreString);
 	pLevel->setString(LevelString);
 
 	// Effect of in-game items
-	iceUpdate ();
-	slowUpdate ();
-	superDamageUpdate ();
-	
+	if (first_item == 1 || second_item == 1) slowUpdate ();
+	if (first_item == 2 || second_item == 2) superDamageUpdate ();
+	if (first_item == 3 || second_item == 3) iceUpdate ();
 
 	if (!isFreeze) {
 		if (time == 0){
 			int random = rand() % 100 + 1; // get a random number from 1 to 100
-
 			// set the chance rate for each character to be summonned
 			if (random >= 1 && random <= 50) ghost1[stt].getSprite()->setVisible(true);
 			if (random >= 31 && random <= 80) ghost2[stt].getSprite()->setVisible(true);
 			if (random >= 81 && random <= 100) angel[stt].getSprite()->setVisible(true);
-			
-			if (IntervalMultipler >= 0.4) IntervalMultipler -= (float) 0.02;
+			if (random == 1 || random == 80 || random == 100) {
+				pRecoveryHP->setPosition(rand()%200+100, rand()%260+25);
+				pRecoveryHP->setVisible(true);
+				tmpLevel = level;
+			}
+			if (level - tmpLevel == 2) pRecoveryHP->setVisible(false);
+			if (IntervalMultipler >= 0.5) IntervalMultipler -= (float) 0.02;
 			time = 60*IntervalMultipler;
 			stt++;
 			level++;
@@ -386,30 +373,27 @@ void GamePlay::update (float pDt){
 	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,speedMultipler);
 	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,speedMultipler);
 	
-
 	if (HouseHP <= 0){
 		GameOverBox->setVisible(true);
-		if (score > HighScore) UserHighScore->setIntegerForKey("high_score", score);
-		CCDirector::sharedDirector()->pause();
+		if (score > HighScore) UserDefault->setIntegerForKey("high_score", score);
+		pauseSchedulerAndActions();
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	}
 }
 
+
 // When the Pause button is clicked
 void GamePlay::menuPauseCallback(CCObject* pSender){
 	//"pause" menu item clicked
-	PauseDialogBox->setVisible(true);
-	CCDirector::sharedDirector()->pause();
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
+	setTouchEnabled(false);
+	pauseSchedulerAndActions();
+	setVisible (false);
+	pauseLayer->setVisible(true);
+	
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
 }
 
-void GamePlay::menuResumeInPauseBoxCallback(CCObject *pSender){
-	PauseDialogBox->setVisible(false);
-	CCDirector::sharedDirector()->resume();
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
-}
-
-void GamePlay::menuMainMenuInPauseBoxCallback(CCObject *pSender){
-	PauseDialogBox->setVisible(false);
-	CCDirector::sharedDirector()->replaceScene(StartScreen::scene());
+void GamePlay::RecoveryHPCallback(CCObject* pSender){
+	HouseHP = 10;
 }

@@ -142,11 +142,12 @@ bool StartScreen::init()
 
 //////////////***MENU CALLBACK***////////////////////////////////////////
 void StartScreen::menuStartCallback(CCObject* pSender){
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
 	CCDirector::sharedDirector()->replaceScene(GamePlay::scene());
-	CCDirector::sharedDirector()->resume();
 }
 
 void StartScreen::menuPreferencesCallback(CCObject* pSender){
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
 	CCDirector::sharedDirector()->replaceScene(Preferences::scene());
 }
 

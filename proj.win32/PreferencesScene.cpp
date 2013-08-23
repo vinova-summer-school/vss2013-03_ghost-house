@@ -82,6 +82,67 @@ bool Preferences::init()
         // Add the label to Preferences layer as a child layer.
         this->addChild(pPrefMainTitle, 1);
 
+		first_item = effectUserDefault->getIntegerForKey("first_item", 0);
+		second_item = effectUserDefault->getIntegerForKey("second_item", 0);
+		numItemsSelected = 0;
+		
+		// Create Slow item
+		pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+			this,
+			menu_selector(Preferences::SlowCallback));
+		CC_BREAK_IF(! pSlowItem);
+
+		pSlowItem->setPosition(ccp(80, size.height - 80));
+
+		CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
+		pSlow->setPosition(CCPointZero);
+		CC_BREAK_IF(! pSlow);
+
+		this->addChild(pSlow, 4);
+
+		if(first_item == 1 || second_item == 1){
+			pSlowItem->setOpacity(100);
+			numItemsSelected++;
+		}
+
+		// Create a Super Damage Item
+		psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+			this,
+			menu_selector(Preferences::superDamageCallback));
+		CC_BREAK_IF(! psuperDamageItem);
+
+		psuperDamageItem->setPosition(ccp(80 , size.height - 140));
+
+		CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
+		psuperDamage->setPosition(CCPointZero);
+		CC_BREAK_IF(! psuperDamage);
+
+		this->addChild(psuperDamage, 4);
+
+		if(first_item == 2 || second_item == 2){
+			psuperDamageItem->setOpacity(100);
+			numItemsSelected++;
+		}
+
+		// Create ice item
+		pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+			this,
+			menu_selector(Preferences::iceEffectCallback));
+		CC_BREAK_IF(! pIceItem);
+
+		pIceItem->setPosition(ccp(80, 130));
+
+		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
+		pIce->setPosition(CCPointZero);
+		CC_BREAK_IF(! pIce);
+
+		this->addChild(pIce, 4);
+
+		if(first_item == 3 || second_item == 3){
+			pIceItem->setOpacity(100); 
+			numItemsSelected++;
+		}
+
         // 3. Add add a splash screen
         CCSprite* pSprite = CCSprite::create("PreferencesBackground.png");
         CC_BREAK_IF(! pSprite);
@@ -104,5 +165,72 @@ bool Preferences::init()
 void Preferences::menuBackCallback(CCObject* pSender)
 {
     // "back" menu item clicked
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
 	CCDirector::sharedDirector()->replaceScene(StartScreen::scene());
+}
+
+void Preferences::SlowCallback(CCObject* pSender){
+	first_item = effectUserDefault->getIntegerForKey("first_item", 0);
+	second_item = effectUserDefault->getIntegerForKey("second_item", 0);
+	
+	if(first_item == 1 || second_item == 1){
+		if (first_item == 1) effectUserDefault->setIntegerForKey("first_item", 0);
+		if (second_item == 1) effectUserDefault->setIntegerForKey("second_item", 0);
+		
+		numItemsSelected--;
+		pSlowItem->setOpacity(255);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+	}
+	else if(numItemsSelected < 2){
+		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",1); 
+		else if (second_item == 0) effectUserDefault->setIntegerForKey("second_item",1);
+			
+		numItemsSelected ++;
+		pSlowItem->setOpacity(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemSelect.wav");
+	}
+}
+
+void Preferences::superDamageCallback(CCObject* pSender){
+	first_item = effectUserDefault->getIntegerForKey("first_item", 0);
+	second_item = effectUserDefault->getIntegerForKey("second_item", 0);
+	
+	if(first_item == 2 || second_item == 2){
+		if (first_item == 2) effectUserDefault->setIntegerForKey("first_item", 0);
+		if (second_item == 2) effectUserDefault->setIntegerForKey("second_item", 0);		
+		
+		numItemsSelected--;
+		psuperDamageItem->setOpacity(255);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+	}
+	else if(numItemsSelected < 2){
+		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",2);
+		else if (second_item == 0) effectUserDefault->setIntegerForKey("second_item",2);
+			
+		numItemsSelected ++;
+		psuperDamageItem->setOpacity(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemSelect.wav");
+	}
+}
+
+void Preferences::iceEffectCallback(CCObject* pSender){
+	first_item = effectUserDefault->getIntegerForKey("first_item", 0);
+	second_item = effectUserDefault->getIntegerForKey("second_item", 0);
+	
+	if(first_item == 3 || second_item == 3){
+		if (first_item == 3) effectUserDefault->setIntegerForKey("first_item", 0);
+		if (second_item == 3) effectUserDefault->setIntegerForKey("second_item", 0);
+		
+		numItemsSelected--;
+		pIceItem->setOpacity(255);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+	}
+	else if(numItemsSelected < 2){
+		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",3);
+		else if (second_item == 0) effectUserDefault->setIntegerForKey("second_item",3);
+		
+		numItemsSelected ++;
+		pIceItem->setOpacity(100);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemSelect.wav");
+	}
 }
