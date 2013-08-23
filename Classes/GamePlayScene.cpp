@@ -395,5 +395,6 @@ void GamePlay::menuPauseCallback(CCObject* pSender){
 }
 
 void GamePlay::RecoveryHPCallback(CCObject* pSender){
-	HouseHP = 10;
+	HouseHP += 5;
+	pRecoveryHP->setVisible(false);
 }
