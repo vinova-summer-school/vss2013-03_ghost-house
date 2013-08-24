@@ -20,12 +20,12 @@ class GamePlay : public cocos2d::CCLayer
 
 	int HouseHP;
 	float IntervalMultipler;
-	int time, stt, level, tmpLevel;
+	int time, stt, wave, tmpWave;
 	int freezetime, slowtime, rHP, damagetime, freezeRefreshTime, slowRefreshTime, damageRefreshTime;
 	int score, HighScore;
 	float speedMultipler;
 	short touchingState; //1: just slided into the sprite's frame, 2: sliding in the sprite's frame, 3: sliding outside
-	char ScoreString[14], HighScoreString[19], HPString[8], LevelString[11]; // Score and HP in string format
+	char ScoreString[14], HighScoreString[13], HPString[8], WaveString[10]; // Score and HP in string format
 	short first_item, second_item;
 
 	bool isFreeze, isSlow, isDamage; // If Freeze, Slow and SuperDamage item is active
@@ -42,7 +42,7 @@ class GamePlay : public cocos2d::CCLayer
 	CCSprite *GameOverBox; // Game Over dialog box
 	CCUserDefault* UserDefault;
 
-	CCLabelTTF* pScore, *pHP, *pHighScore, *pLevel;
+	CCLabelTTF* pScore, *pHP, *pHighScore, *pWave;
 
 protected:
 	CCMotionStreak *streak;

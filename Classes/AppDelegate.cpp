@@ -1,31 +1,23 @@
-#include "cocos2d.h"
-#include "CCEGLView.h"
 #include "AppDelegate.h"
-#include "SimpleAudioEngine.h"
-
-#include "GamePlayScene.h"
 #include "StartScreenScene.h"
-#include "PreferencesScene.h"
-
-using namespace CocosDenshion;
 
 USING_NS_CC;
 
-AppDelegate::AppDelegate()
+AppDelegate::AppDelegate() {
+
+}
+
+AppDelegate::~AppDelegate() 
 {
 }
 
-AppDelegate::~AppDelegate()
-{
-    SimpleAudioEngine::end();
-}
-
-bool AppDelegate::applicationDidFinishLaunching()
-{
+bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
-    CCDirector *pDirector = CCDirector::sharedDirector();
-    pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
+    CCDirector* pDirector = CCDirector::sharedDirector();
+    CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 
+    pDirector->setOpenGLView(pEGLView);
+	
     // turn on display FPS
     pDirector->setDisplayStats(true);
 
@@ -33,25 +25,26 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-	CCScene *pScene = StartScreen::scene();
+    CCScene *pScene = StartScreen::scene();
 
     // run
     pDirector->runWithScene(pScene);
+
     return true;
 }
 
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
-void AppDelegate::applicationDidEnterBackground()
-{
+void AppDelegate::applicationDidEnterBackground() {
     CCDirector::sharedDirector()->stopAnimation();
 
-    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+    // if you use SimpleAudioEngine, it must be pause
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
-void AppDelegate::applicationWillEnterForeground()
-{
+void AppDelegate::applicationWillEnterForeground() {
     CCDirector::sharedDirector()->startAnimation();
 
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+    // if you use SimpleAudioEngine, it must resume here
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }

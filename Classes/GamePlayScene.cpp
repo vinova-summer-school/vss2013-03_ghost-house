@@ -51,7 +51,7 @@ bool GamePlay::init()
 
 		//Game soundtrack
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
-		"fallen army.wav",true);
+		"music.wav",true);
 		
 
 		////////////////*** Outline Background ***///////////////////////
@@ -103,13 +103,13 @@ bool GamePlay::init()
 		pHP->setPosition(ccp(50, size.height / 1.3));
 		this->addChild(pHP, 6);
 
-		// Level
-		level = 0;
-		sprintf (LevelString, "Level: %d", level);
+		// Wave
+		wave = 0;
+		sprintf (WaveString, "Wave: %d", wave);
 
-		pLevel = CCLabelTTF::create(LevelString, "Calibri", 18);
-		pLevel->setPosition(ccp(size.width - 40, 20));
-		this->addChild(pLevel, 6);
+		pWave = CCLabelTTF::create(WaveString, "Calibri", 18);
+		pWave->setPosition(ccp(size.width - 40, 20));
+		this->addChild(pWave, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
@@ -136,11 +136,11 @@ bool GamePlay::init()
 		second_item = UserDefault->getIntegerForKey("second_item", 0);
 
 		//"star"
-		pRecoveryHP = CCMenuItemImage::create("Powerstar.png", "star.png",
+		pRecoveryHP = CCMenuItemImage::create("Powerstar.png", "Powerstar.png",
 			this,
 			menu_selector(GamePlay::RecoveryHPCallback));
 		CC_BREAK_IF (!pRecoveryHP);
-//		pRecoveryHP->setPosition(rand()%200+100, rand()%260+25);
+		pRecoveryHP->setVisible (false);
 		CCMenu *pRecovery = CCMenu::create(pRecoveryHP,NULL);
 		pRecovery->setPosition(CCPointZero);
 		CC_BREAK_IF(!pRecovery);
@@ -251,7 +251,7 @@ bool GamePlay::init()
 	UserDefault = CCUserDefault::sharedUserDefault();
 
 	time = stt = 0;
-	tmpLevel = -1;
+	tmpWave = 0;
 	isFreeze = false;
 	freezeRefreshTime = 0;
 	isSlow = false;
@@ -335,10 +335,10 @@ void GamePlay::update (float pDt){
 	// Number's strings
 	sprintf (HPString, "HP: %d", HouseHP);
 	sprintf (ScoreString, "Score: %d", score);
-	sprintf (LevelString, "Level: %d", level);
+	sprintf (WaveString, "Wave: %d", wave);
 	pHP->setString(HPString);
 	pScore->setString(ScoreString);
-	pLevel->setString(LevelString);
+	pWave->setString(WaveString);
 
 	// Effect of in-game items
 	if (first_item == 1 || second_item == 1) slowUpdate ();
@@ -352,16 +352,16 @@ void GamePlay::update (float pDt){
 			if (random >= 1 && random <= 50) ghost1[stt].getSprite()->setVisible(true);
 			if (random >= 31 && random <= 80) ghost2[stt].getSprite()->setVisible(true);
 			if (random >= 81 && random <= 100) angel[stt].getSprite()->setVisible(true);
-			if (random == 1 || random == 80 || random == 100) {
+			if (random == 1 || random == 49 || random == 100) {
 				pRecoveryHP->setPosition(rand()%200+100, rand()%260+25);
 				pRecoveryHP->setVisible(true);
-				tmpLevel = level;
+				tmpWave = wave;
 			}
-			if (level - tmpLevel == 2) pRecoveryHP->setVisible(false);
+			if (wave - tmpWave == 2) pRecoveryHP->setVisible(false);
 			if (IntervalMultipler >= 0.5) IntervalMultipler -= (float) 0.02;
 			time = 60*IntervalMultipler;
 			stt++;
-			level++;
+			wave++;
 			score += 5;
 			if (speedMultipler <= 2.5) speedMultipler += (float) 0.025;
 			if (stt == 5) stt = 0;
@@ -391,10 +391,14 @@ void GamePlay::menuPauseCallback(CCObject* pSender){
 	setVisible (false);
 	pauseLayer->setVisible(true);
 	
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
+	//CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
 }
 
 void GamePlay::RecoveryHPCallback(CCObject* pSender){
+<<<<<<< HEAD
 	HouseHP += 5;
+=======
+	HouseHP += rand() % 2 + 2;
+>>>>>>> Transferred to new Cocos2d-x version
 	pRecoveryHP->setVisible(false);
 }
