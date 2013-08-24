@@ -395,10 +395,6 @@ void GamePlay::menuPauseCallback(CCObject* pSender){
 }
 
 void GamePlay::RecoveryHPCallback(CCObject* pSender){
-<<<<<<< HEAD
-	HouseHP += 5;
-=======
 	HouseHP += rand() % 2 + 2;
->>>>>>> Transferred to new Cocos2d-x version
 	pRecoveryHP->setVisible(false);
 }
