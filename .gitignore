@@ -12,10 +12,11 @@
 *.la
 *.a
 
-.DS_Store
-proj.win32/Debug.win32/*
-proj.win32/Release.win32/*
-proj.win32/*.sdf
+#Compiled Java classes
+*.class
+*.d
+*.cache
 
-proj.blackberry/*
-proj.marmalade/*
+
+.DS_Store
+

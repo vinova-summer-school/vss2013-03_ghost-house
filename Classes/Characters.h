@@ -83,9 +83,9 @@ public:
 
 
 /////*** DECLARE SOME CHARACTERS HERE ***////////////////////////////////
-class ghost1 : public character{
+class Ghost1 : public character{
 public:
-	ghost1 (){
+	Ghost1 (){
 		Sprite = CCSprite::create("ghost1.png");
 		initHP = 2;
 		init ();
@@ -93,9 +93,9 @@ public:
 	}
 };
 
-class ghost2 : public character{
+class Ghost2 : public character{
 public:
-	ghost2 (){
+	Ghost2 (){
 		Sprite = CCSprite::create("ghost2.png");
 		initHP = 3;
 		init ();
@@ -103,9 +103,9 @@ public:
 	}
 };
 
-class angel : public character{
+class Angel : public character{
 public:
-	angel (){
+	Angel (){
 		Sprite = CCSprite::create("angel_normal.png");
 		initHP = 1;
 		init ();

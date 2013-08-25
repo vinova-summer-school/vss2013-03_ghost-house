@@ -14,9 +14,9 @@ using namespace cocos2d;
 class GamePlay : public cocos2d::CCLayer
 {
 	short ghost1Count, ghost2Count, angelCount; // Numbers of sprites that will be shown
-	ghost1 ghost1[5];
-	ghost2 ghost2[5];
-	angel angel [5];
+	Ghost1 ghost1[5];
+	Ghost2 ghost2[5];
+	Angel angel [5];
 
 	int HouseHP;
 	float IntervalMultipler;
