@@ -47,6 +47,15 @@ bool Preferences::init()
 		/////////////////////////******MENU ITEMS********/////////////////////////
         // 1. Add a menu item with "back" arrow, which is clicked to return to the main menu
 
+		CCSprite* pOptionSprite = CCSprite::create("OptionSprite.png");
+        CC_BREAK_IF(! pOptionSprite);
+
+        // Place the sprite on the center of the screen
+        pOptionSprite->setPosition(ccp(size.width/2, size.height/2));
+
+        // Add the sprite to GamePlay layer as a child layer.
+        this->addChild(pOptionSprite, 1);
+
         // Create a "back" menu item with close icon, it's an auto release object.
         CCMenuItemImage *pBackItem = CCMenuItemImage::create(
             "BackArrow.png",
@@ -67,10 +76,8 @@ bool Preferences::init()
         this->addChild(pBack, 1);
 		//////////////////*****END OF MENU ITEMS***********/////////////////////
 
-        // 2. Add a label shows "Hello World".
-
         // Create a label and initialize with string "Preferences".
-        CCLabelTTF* pPrefMainTitle = CCLabelTTF::create("Preferences", "Verdana", 24);
+		CCLabelTTF* pPrefMainTitle = CCLabelTTF::create("Choose up to 2 items", "Verdana", (int)(size.height/10));
 		ccColor3B PrefMainTitleColor = {255,255,0};
 		pPrefMainTitle->setColor(PrefMainTitleColor);
         CC_BREAK_IF(! pPrefMainTitle);
@@ -82,6 +89,7 @@ bool Preferences::init()
         // Add the label to Preferences layer as a child layer.
         this->addChild(pPrefMainTitle, 1);
 
+
 		first_item = effectUserDefault->getIntegerForKey("first_item", 0);
 		second_item = effectUserDefault->getIntegerForKey("second_item", 0);
 		numItemsSelected = 0;
@@ -92,13 +100,23 @@ bool Preferences::init()
 			menu_selector(Preferences::SlowCallback));
 		CC_BREAK_IF(! pSlowItem);
 
-		pSlowItem->setPosition(ccp(80, size.height - 80));
+		pSlowItem->setPosition(ccp(0.1*size.width, 0.68*size.height));
 
 		CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
 		pSlow->setPosition(CCPointZero);
 		CC_BREAK_IF(! pSlow);
 
 		this->addChild(pSlow, 4);
+
+		pFirstItem = CCLabelTTF::create("Make the ghosts be slower than normal", "Calibri", (int)(size.height/16));
+        CC_BREAK_IF(! pFirstItem);
+        // place the label upper.
+		pFirstItem->setAnchorPoint(ccp(0,0.5));
+		pFirstItem->setPosition(ccp(0.2*size.width, 0.68*size.height));
+
+        // Add the label to GamePlay layer as a child layer.
+        this->addChild(pFirstItem, 6);
+
 
 		if(first_item == 1 || second_item == 1){
 			pSlowItem->setOpacity(100);
@@ -111,13 +129,24 @@ bool Preferences::init()
 			menu_selector(Preferences::superDamageCallback));
 		CC_BREAK_IF(! psuperDamageItem);
 
-		psuperDamageItem->setPosition(ccp(80 , size.height - 140));
+		psuperDamageItem->setPosition(ccp(0.1*size.width , 0.44*size.height));
 
 		CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
 		psuperDamage->setPosition(CCPointZero);
 		CC_BREAK_IF(! psuperDamage);
 
 		this->addChild(psuperDamage, 4);
+
+		pSecondItem = CCLabelTTF::create("Kill the ghosts with one hit only", "Calibri", (int)(size.height/16));
+        CC_BREAK_IF(! pSecondItem);
+        // place the label upper.
+		pSecondItem->setAnchorPoint(ccp(0,0.5));
+		pSecondItem->setPosition(ccp(0.2*size.width, 0.44*size.height));
+
+        // Add the label to GamePlay layer as a child layer.
+        this->addChild(pSecondItem, 6);
+
+
 
 		if(first_item == 2 || second_item == 2){
 			psuperDamageItem->setOpacity(100);
@@ -130,13 +159,23 @@ bool Preferences::init()
 			menu_selector(Preferences::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
 
-		pIceItem->setPosition(ccp(80, 130));
+		pIceItem->setPosition(ccp(0.1*size.width, 0.19*size.height));
 
 		CCMenu* pIce = CCMenu::create(pIceItem,NULL);
 		pIce->setPosition(CCPointZero);
 		CC_BREAK_IF(! pIce);
 
 		this->addChild(pIce, 4);
+
+		pThirdItem = CCLabelTTF::create("Freezing all the ghosts", "Calibri", (int)(size.height/16));
+        CC_BREAK_IF(! pThirdItem);
+        // place the label upper.
+		pThirdItem->setAnchorPoint(ccp(0,0.5));
+		pThirdItem->setPosition(ccp(0.2*size.width, 0.19*size.height));
+
+        // Add the label to GamePlay layer as a child layer.
+        this->addChild(pThirdItem, 6);
+
 
 		if(first_item == 3 || second_item == 3){
 			pIceItem->setOpacity(100); 

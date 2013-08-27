@@ -64,7 +64,7 @@ bool GamePlay::init()
 		CC_BREAK_IF(! pPauseItem);
 		
 		// Place the pause button on top right corner
-		pPauseItem->setPosition(ccp(size.width - 20, size.height - 20));
+		pPauseItem->setPosition(ccp(0.95*size.width, 0.93*size.height));
 
 		// Create a menu with the "pause" menu item, it's an auto release object
 		CCMenu* pPause = CCMenu::create(pPauseItem, NULL);
@@ -78,10 +78,11 @@ bool GamePlay::init()
 		score = 0;
 		sprintf(ScoreString, "Score : %d", score);
 
-		pScore = CCLabelTTF::create(ScoreString, "Calibri", 20);
+		pScore = CCLabelTTF::create(ScoreString, "Calibri", (int)size.height/16);
         CC_BREAK_IF(! pScore);
         // place the label upper.
-		pScore->setPosition(ccp(size.width - 110, size.height - 40));
+		pScore->setAnchorPoint(ccp(0,0.5));
+		pScore->setPosition(ccp(0.7*size.width, 0.9*size.height));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
@@ -90,25 +91,27 @@ bool GamePlay::init()
 		HighScore = UserDefault->getIntegerForKey("high_score", 0);
 		sprintf (HighScoreString, "High: %d", HighScore);
 
-		pHighScore = CCLabelTTF::create(HighScoreString, "Calibri", 18);
+		pHighScore = CCLabelTTF::create(HighScoreString, "Calibri", (int)size.height/18);
 		CC_BREAK_IF(! pHighScore);
-		pHighScore->setPosition(ccp(size.width - 110, size.height - 20));
+		pHighScore->setAnchorPoint(ccp(0,0.5));
+		pHighScore->setPosition(ccp(0.7*size.width, 0.95*size.height));
 		this->addChild(pHighScore, 4);
 
         // House Health Points
 		HouseHP = 10;
 		sprintf (HPString, "HP: %d", HouseHP);
 
-		pHP = CCLabelTTF::create(HPString, "Calibri", 20);
-		pHP->setPosition(ccp(50, size.height / 1.3));
+		pHP = CCLabelTTF::create(HPString, "Calibri", (int)size.height/16);
+		pHP->setPosition(ccp(0.1*size.width, 0.77*size.height));
 		this->addChild(pHP, 6);
 
 		// Wave
 		wave = 0;
 		sprintf (WaveString, "Wave: %d", wave);
 
-		pWave = CCLabelTTF::create(WaveString, "Calibri", 18);
-		pWave->setPosition(ccp(size.width - 40, 20));
+		pWave = CCLabelTTF::create(WaveString, "Calibri", (int)size.height/18);
+		pWave->setAnchorPoint(ccp(1,0));
+		pWave->setPosition(ccp(0.98*size.width, 0.02*size.height));
 		this->addChild(pWave, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
@@ -136,7 +139,7 @@ bool GamePlay::init()
 		second_item = UserDefault->getIntegerForKey("second_item", 0);
 
 		//"star"
-		pRecoveryHP = CCMenuItemImage::create("Powerstar.png", "Powerstar.png",
+		pRecoveryHP = CCMenuItemImage::create("PowerStar.png", "PowerStar.png",
 			this,
 			menu_selector(GamePlay::RecoveryHPCallback));
 		CC_BREAK_IF (!pRecoveryHP);
@@ -153,8 +156,8 @@ bool GamePlay::init()
 				menu_selector(GamePlay::iceEffectCallback));
 			CC_BREAK_IF(! pIceItem);
 
-			if (first_item == 3) pIceItem->setPosition(ccp(40, size.height - 20));
-			else if (second_item == 3) pIceItem->setPosition(ccp(90, size.height - 20));
+			if (first_item == 3) pIceItem->setPosition(ccp(0.08*size.width, 0.9*size.height));
+			else if (second_item == 3) pIceItem->setPosition(ccp(0.2*size.width, 0.9*size.height));
 
 			CCMenu* pIce = CCMenu::create(pIceItem,NULL);
 			pIce->setPosition(CCPointZero);
@@ -170,8 +173,8 @@ bool GamePlay::init()
 				menu_selector(GamePlay::SlowCallback));
 			CC_BREAK_IF(! pSlowItem);
 
-			if (first_item == 1) pSlowItem->setPosition(ccp(40, size.height - 20));
-			else if (second_item == 1) pSlowItem->setPosition(ccp(90, size.height - 20));
+			if (first_item == 1) pSlowItem->setPosition(ccp(0.08*size.width, 0.9*size.height));
+			else if (second_item == 1) pSlowItem->setPosition(ccp(0.2*size.width, 0.9*size.height));
 
 			CCMenu* pSlow = CCMenu::create(pSlowItem,NULL);
 			pSlow->setPosition(CCPointZero);
@@ -187,8 +190,8 @@ bool GamePlay::init()
 				menu_selector(GamePlay::superDamageCallback));
 			CC_BREAK_IF(! psuperDamageItem);
 
-			if (first_item == 2) psuperDamageItem->setPosition(ccp(40, size.height - 20));
-			else if (second_item == 2) psuperDamageItem->setPosition(ccp(90, size.height - 20));
+			if (first_item == 2) psuperDamageItem->setPosition(ccp(0.08*size.width, 0.9*size.height));
+			else if (second_item == 2) psuperDamageItem->setPosition(ccp(0.2*size.width, 0.9*size.height));
 
 			CCMenu* psuperDamage = CCMenu::create(psuperDamageItem,NULL);
 			psuperDamage->setPosition(CCPointZero);
@@ -211,7 +214,7 @@ bool GamePlay::init()
 			menu_selector(PauseLayer::menuMainMenuCallback));
 		CC_BREAK_IF(! pOverBox_MainMenuItem);
 
-		pOverBox_MainMenuItem->setPosition(ccp(size.width - 300, size.height - 250));
+		pOverBox_MainMenuItem->setPosition(ccp(GameOverBox->getContentSize().width/2, 0.35*GameOverBox->getContentSize().height));
 
 		CCMenu *pOverBox_MainMenu = CCMenu::create(pOverBox_MainMenuItem, NULL);
 		pOverBox_MainMenu->setPosition(CCPointZero);
@@ -226,7 +229,7 @@ bool GamePlay::init()
         CC_BREAK_IF(! pGameOverLabel);
 
         // Place the label upper.
-        pGameOverLabel->setPosition(ccp(size.width - 300 , size.height - 175));
+        pGameOverLabel->setPosition(ccp(GameOverBox->getContentSize().width/2 , 0.75*GameOverBox->getContentSize().height));
 
         // Add the label to GamePlay layer as a child layer.
         GameOverBox->addChild(pGameOverLabel, 4);
@@ -289,7 +292,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				if (touchingState == 1){
 					ghost1[i].reduceHPBy (rHP);
 					if (ghost1[i].isDead()) score += 20;
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
 				}
 			}
 	if (touching == false)
@@ -301,7 +304,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				if (touchingState == 1) {
 					ghost2[i].reduceHPBy (rHP);
 					if (ghost2[i].isDead()) score += 30;
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
 				}
 			}
 	if (touching == false)
@@ -313,7 +316,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				if (touchingState == 1) {
 					angel[i].reduceHPBy (rHP);
 					if (angel[i].isDead()) score -= 20;
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
 				}
 			}
 	if (touching == false) touchingState = 3;

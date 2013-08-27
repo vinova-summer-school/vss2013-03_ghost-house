@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 #include "GamePlayScene.h"
 #include "PreferencesScene.h"
+#include "Credits.h"
 
 class StartScreen : public cocos2d::CCLayer
 {
@@ -20,6 +21,7 @@ public:
     void menuCloseCallback(CCObject* pSender);
 	void menuStartCallback(CCObject* pSender);
 	void menuPreferencesCallback(CCObject* pSender);
+	void menuCreditsCallback(CCObject* pSender);
     
     // implement the "static node()" method manually
 	CREATE_FUNC(StartScreen);

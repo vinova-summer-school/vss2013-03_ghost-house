@@ -19,7 +19,7 @@ bool PauseLayer::init(){
 			menu_selector(PauseLayer::menuResumeCallback));
 		//CC_BREAK_IF(! pPauseBox_ResumeItem);
 
-		pPauseBox_ResumeItem->setPosition(ccp(size.width/2 - 100, size.height/2 - 110));
+		pPauseBox_ResumeItem->setPosition(ccp(0.3*PauseDialogBox->getContentSize().width, 40));
 
 		CCMenu *pPauseBox_Resume = CCMenu::create(pPauseBox_ResumeItem, NULL);
 		pPauseBox_Resume->setPosition(CCPointZero);
@@ -35,7 +35,7 @@ bool PauseLayer::init(){
 			menu_selector(PauseLayer::menuMainMenuCallback));
 		//CC_BREAK_IF(! pPauseBox_MainMenuItem);
 
-		pPauseBox_MainMenuItem->setPosition(ccp(size.width - 200, size.height - 200));
+		pPauseBox_MainMenuItem->setPosition(ccp(0.7*PauseDialogBox->getContentSize().width, 40));
 
 		CCMenu *pPauseBox_MainMenu = CCMenu::create(pPauseBox_MainMenuItem, NULL);
 		pPauseBox_MainMenu->setPosition(CCPointZero);

@@ -2,6 +2,7 @@
 
 #include "StartScreenScene.h"
 
+
 using namespace cocos2d;
 
 CCScene* StartScreen::scene()
@@ -66,6 +67,24 @@ bool StartScreen::init()
         // Add the menu to StartScreen layer as a child layer.
         this->addChild(pMenu, 1);
 
+		CCMenuItemImage *pCreditsItem = CCMenuItemImage::create(
+            "CloseNormal.png",
+            "CloseSelected.png",
+            this,
+            menu_selector(StartScreen::menuCreditsCallback));
+        CC_BREAK_IF(! pCreditsItem);
+
+        // Place the menu item bottom-right conner.
+        pCreditsItem->setPosition(ccp(size.width/10, size.height/6));
+
+        // Create a menu with the "Credits" menu item, it's an auto release object.
+        CCMenu* pCreditsMenu = CCMenu::create(pCreditsItem, NULL);
+        pCreditsMenu->setPosition(CCPointZero);
+        CC_BREAK_IF(! pCreditsMenu);
+
+        // Add the menu to StartScreen layer as a child layer.
+        this->addChild(pCreditsMenu, 1);
+
 		// 1* Add a menu item with "->" image, which is clicked to go to the main game scene
 		// Create a "start" menu item with start icon, it's an auto release object.
         CCMenuItemImage *pStartItem = CCMenuItemImage::create(
@@ -76,7 +95,7 @@ bool StartScreen::init()
         CC_BREAK_IF(! pStartItem);
 
 		//Place the start menu item
-        pStartItem->setPosition(ccp(size.width - 260, 200));
+		pStartItem->setPosition(ccp(0.45*size.width, 0.625*size.height));
 
         // Create a menu with the "start" menu item, it's an auto release object.
         CCMenu* pStart = CCMenu::create(pStartItem, NULL);
@@ -95,7 +114,7 @@ bool StartScreen::init()
 			menu_selector(StartScreen::menuPreferencesCallback));
 
 		//Place the Preferences Item
-		pPreferencesItem->setPosition(ccp(size.width - 130, 150));
+		pPreferencesItem->setPosition(ccp(0.71*size.width, 0.46*size.height));
 
 		//Create a menu with the "preferences" menu item, it's an auto release object
 		CCMenu* pPreferences = CCMenu::create(pPreferencesItem, NULL);
@@ -155,4 +174,8 @@ void StartScreen::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked
 	CCDirector::sharedDirector()->end();
+}
+
+void StartScreen::menuCreditsCallback(CCObject* pSender){
+	CCDirector::sharedDirector()->replaceScene(Credits::scene());
 }

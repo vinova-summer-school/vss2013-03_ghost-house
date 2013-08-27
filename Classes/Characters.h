@@ -20,7 +20,9 @@ public:
 	//int a;
 	// Character initialization
 	void init(){
-		Sprite->setPosition (ccp(520, rand() % 245 + 30));	// Init the position
+		Sprite->setPosition (ccp(CCDirector::sharedDirector()->getWinSize().width + 50,
+                                 rand() % (int)((0.81-0.1)*CCDirector::sharedDirector()->getWinSize().height+
+                                 0.1*CCDirector::sharedDirector()->getWinSize().height) ));	// Init the position
 		initPos = Sprite->getPosition();						// Get the init position
 		pos = initPos;										// At first current position is the init one
 		HP = initHP;										// At first current HP is the init one
@@ -44,16 +46,16 @@ public:
 		if (Sprite->isVisible()){
 			switch(moveStyle){
 			case 0:
-				pos.x -= 1*speedMultipler;
+                pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
 				break;
 			case 1:
-				pos.x -= 2*speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
 				break;
 			case 2:
-				pos.x -= 2.5*speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
 				break;
 			case 3:
-				pos.x -= 1*speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
 				pos.y = initPos.y + 15*sin (0.05*pos.x);
 				break;
 			case 4:
@@ -64,7 +66,7 @@ public:
 			}
 			Sprite->setPosition(pos);
 		}
-		if (pos.x <= 80 ){
+		if (pos.x <= 0.16*CCDirector::sharedDirector()->getWinSize().width){
 			init();
 			if (isGhost) HouseHP--;
 		}

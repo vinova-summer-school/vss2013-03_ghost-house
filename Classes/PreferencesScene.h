@@ -14,6 +14,8 @@ class Preferences : public cocos2d::CCLayer
 	short numItemsSelected;
 	short first_item, second_item;
 
+	CCLabelTTF *pFirstItem, *pSecondItem, *pThirdItem;
+
 	CCUserDefault *effectUserDefault;
 
 public:
