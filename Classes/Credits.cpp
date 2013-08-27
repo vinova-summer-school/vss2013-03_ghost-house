@@ -47,13 +47,13 @@ bool Credits::init()
 		// 1** Add a menu item with options image, which is clicked to go to the Back
 		// Create a "Options" menu item with the "options" icon, it's an auto release object
 		CCMenuItemImage *pBackItem = CCMenuItemImage::create(
-			"OptionsButton.png",
-			"OptionsButtonSelected.png",
+			"BackArrow@2x.png",
+			"BackArrowSelected@2x.png",
 			this,
 			menu_selector(Credits::menuBackCallback));
 
 		//Place the Back Item
-		pBackItem->setPosition(ccp(40, size.height - 40));
+		pBackItem->setPosition(ccp(0.07*size.width, 0.92*size.height));
 
 		//Create a menu with the "Back" menu item, it's an auto release object
 		CCMenu* pBack = CCMenu::create(pBackItem, NULL);
@@ -66,7 +66,7 @@ bool Credits::init()
 		//////////////////*****END OF MENU ITEMS***********/////////////////////
 
         // Create a label and initialize with string "Hello World".
-        CCLabelTTF* pLabel = CCLabelTTF::create("Ghost House\nv1.0\n\n\nCreated by Khanh, Ngoc, Khoa\n\n\nA product of VSS2013", "Calibri", 20);
+		CCLabelTTF* pLabel = CCLabelTTF::create("Ghost House\nTesting Build\n\n\nCreated by Khanh, Ngoc, Khoa\n\n\nA product of VSS2013", "Calibri", size.height/16);
         CC_BREAK_IF(! pLabel);
 
         // Get window size and place the label upper. 
@@ -75,16 +75,6 @@ bool Credits::init()
 
         // Add the label to Credits layer as a child layer.
         this->addChild(pLabel, 1);
-
-        // 3. Add add a splash screen
-        CCSprite* pSprite = CCSprite::create("Ghost_house.png");
-        CC_BREAK_IF(! pSprite);
-
-        // Place the sprite on the center of the screen
-        pSprite->setPosition(ccp(size.width/2, size.height/2));
-
-        // Add the sprite to Credits layer as a child layer.
-        this->addChild(pSprite, 0);
 
         bRet = true;
 		

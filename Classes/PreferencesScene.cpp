@@ -45,27 +45,16 @@ bool Preferences::init()
 		CCSize size = CCDirector::sharedDirector()->getWinSize();
 
 		/////////////////////////******MENU ITEMS********/////////////////////////
-        // 1. Add a menu item with "back" arrow, which is clicked to return to the main menu
-
-		CCSprite* pOptionSprite = CCSprite::create("OptionSprite.png");
-        CC_BREAK_IF(! pOptionSprite);
-
-        // Place the sprite on the center of the screen
-        pOptionSprite->setPosition(ccp(size.width/2, size.height/2));
-
-        // Add the sprite to GamePlay layer as a child layer.
-        this->addChild(pOptionSprite, 1);
-
         // Create a "back" menu item with close icon, it's an auto release object.
         CCMenuItemImage *pBackItem = CCMenuItemImage::create(
-            "BackArrow.png",
-            "BackArrowSelected.png",
+            "BackArrow@2x.png",
+            "BackArrowSelected@2x.png",
             this,
             menu_selector(Preferences::menuBackCallback));
         CC_BREAK_IF(! pBackItem);
 
         // Place the menu item top-left conner.
-		pBackItem->setPosition(ccp(40, size.height - 40));
+		pBackItem->setPosition(ccp(0.07*size.width, 0.92*size.height));
 
         // Create a menu with the "back" menu item, it's an auto release object.
         CCMenu* pBack = CCMenu::create(pBackItem, NULL);
@@ -95,7 +84,7 @@ bool Preferences::init()
 		numItemsSelected = 0;
 		
 		// Create Slow item
-		pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+		pSlowItem = CCMenuItemImage::create("Slow@2x.png","Slow@2x.png",
 			this,
 			menu_selector(Preferences::SlowCallback));
 		CC_BREAK_IF(! pSlowItem);
@@ -108,7 +97,7 @@ bool Preferences::init()
 
 		this->addChild(pSlow, 4);
 
-		pFirstItem = CCLabelTTF::create("Make the ghosts be slower than normal", "Calibri", (int)(size.height/16));
+		pFirstItem = CCLabelTTF::create("Makes the ghosts moving slower\nfor a while", "Calibri", (int)(size.height/16));
         CC_BREAK_IF(! pFirstItem);
         // place the label upper.
 		pFirstItem->setAnchorPoint(ccp(0,0.5));
@@ -124,7 +113,7 @@ bool Preferences::init()
 		}
 
 		// Create a Super Damage Item
-		psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+		psuperDamageItem = CCMenuItemImage::create("superDamage@2x.png","superDamage@2x.png",
 			this,
 			menu_selector(Preferences::superDamageCallback));
 		CC_BREAK_IF(! psuperDamageItem);
@@ -137,7 +126,7 @@ bool Preferences::init()
 
 		this->addChild(psuperDamage, 4);
 
-		pSecondItem = CCLabelTTF::create("Kill the ghosts with one hit only", "Calibri", (int)(size.height/16));
+		pSecondItem = CCLabelTTF::create("Lets you have the highest\nattack damage ever for a while", "Calibri", (int)(size.height/16));
         CC_BREAK_IF(! pSecondItem);
         // place the label upper.
 		pSecondItem->setAnchorPoint(ccp(0,0.5));
@@ -154,7 +143,7 @@ bool Preferences::init()
 		}
 
 		// Create ice item
-		pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+		pIceItem = CCMenuItemImage::create("ice@2x.png","ice@2x.png",
 			this,
 			menu_selector(Preferences::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
@@ -167,7 +156,7 @@ bool Preferences::init()
 
 		this->addChild(pIce, 4);
 
-		pThirdItem = CCLabelTTF::create("Freezing all the ghosts", "Calibri", (int)(size.height/16));
+		pThirdItem = CCLabelTTF::create("Freezes all ghosts on the screen\nfor a while", "Calibri", (int)(size.height/16));
         CC_BREAK_IF(! pThirdItem);
         // place the label upper.
 		pThirdItem->setAnchorPoint(ccp(0,0.5));
@@ -183,7 +172,7 @@ bool Preferences::init()
 		}
 
         // 3. Add add a splash screen
-        CCSprite* pSprite = CCSprite::create("PreferencesBackground.png");
+        CCSprite* pSprite = CCSprite::create("OptionSprite@2x.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen
@@ -218,7 +207,7 @@ void Preferences::SlowCallback(CCObject* pSender){
 		
 		numItemsSelected--;
 		pSlowItem->setOpacity(255);
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("tick.wav");
 	}
 	else if(numItemsSelected < 2){
 		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",1); 
@@ -240,7 +229,7 @@ void Preferences::superDamageCallback(CCObject* pSender){
 		
 		numItemsSelected--;
 		psuperDamageItem->setOpacity(255);
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("tick.wav");
 	}
 	else if(numItemsSelected < 2){
 		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",2);
@@ -262,7 +251,7 @@ void Preferences::iceEffectCallback(CCObject* pSender){
 		
 		numItemsSelected--;
 		pIceItem->setOpacity(255);
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("ItemDeselect.wav");
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("tick.wav");
 	}
 	else if(numItemsSelected < 2){
 		if (first_item == 0) effectUserDefault->setIntegerForKey("first_item",3);

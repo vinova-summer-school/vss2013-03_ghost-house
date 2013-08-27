@@ -20,9 +20,8 @@ public:
 	//int a;
 	// Character initialization
 	void init(){
-		Sprite->setPosition (ccp(CCDirector::sharedDirector()->getWinSize().width + 50,
-                                 rand() % (int)((0.81-0.1)*CCDirector::sharedDirector()->getWinSize().height+
-                                 0.1*CCDirector::sharedDirector()->getWinSize().height) ));	// Init the position
+		CCSize size = CCDirector::sharedDirector()->getWinSize();
+		Sprite->setPosition (ccp(size.width + 50, rand() % (int)(0.75*size.height) + 0.075*size.height));	// Init the position
 		initPos = Sprite->getPosition();						// Get the init position
 		pos = initPos;										// At first current position is the init one
 		HP = initHP;										// At first current HP is the init one
@@ -88,7 +87,7 @@ public:
 class Ghost1 : public character{
 public:
 	Ghost1 (){
-		Sprite = CCSprite::create("ghost1.png");
+		Sprite = CCSprite::create("ghost1@2x.png");
 		initHP = 2;
 		init ();
 		isGhost = true;
@@ -98,7 +97,7 @@ public:
 class Ghost2 : public character{
 public:
 	Ghost2 (){
-		Sprite = CCSprite::create("ghost2.png");
+		Sprite = CCSprite::create("ghost2@2x.png");
 		initHP = 3;
 		init ();
 		isGhost = true;
@@ -108,7 +107,7 @@ public:
 class Angel : public character{
 public:
 	Angel (){
-		Sprite = CCSprite::create("angel_normal.png");
+		Sprite = CCSprite::create("angel_normal@2x.png");
 		initHP = 1;
 		init ();
 		isGhost = false;

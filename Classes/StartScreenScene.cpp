@@ -68,8 +68,8 @@ bool StartScreen::init()
         this->addChild(pMenu, 1);
 
 		CCMenuItemImage *pCreditsItem = CCMenuItemImage::create(
-            "CloseNormal.png",
-            "CloseSelected.png",
+            "information@2x.png",
+            "information@2x.png",
             this,
             menu_selector(StartScreen::menuCreditsCallback));
         CC_BREAK_IF(! pCreditsItem);
@@ -88,8 +88,8 @@ bool StartScreen::init()
 		// 1* Add a menu item with "->" image, which is clicked to go to the main game scene
 		// Create a "start" menu item with start icon, it's an auto release object.
         CCMenuItemImage *pStartItem = CCMenuItemImage::create(
-            "StartButton.png",
-            "StartButtonSelected.png",
+            "StartButton@2x.png",
+            "StartButtonSelected@2x.png",
             this,
             menu_selector(StartScreen::menuStartCallback));
         CC_BREAK_IF(! pStartItem);
@@ -108,8 +108,8 @@ bool StartScreen::init()
 		// 1** Add a menu item with options image, which is clicked to go to the Preferences
 		// Create a "Options" menu item with the "options" icon, it's an auto release object
 		CCMenuItemImage *pPreferencesItem = CCMenuItemImage::create(
-			"OptionsButton.png",
-			"OptionsButtonSelected.png",
+			"OptionsButton@2x.png",
+			"OptionsButtonSelected@2x.png",
 			this,
 			menu_selector(StartScreen::menuPreferencesCallback));
 
@@ -140,7 +140,7 @@ bool StartScreen::init()
         this->addChild(pLabel, 1);
 		*/
         // 3. Add add a splash screen
-        CCSprite* pSprite = CCSprite::create("Ghost_house.png");
+        CCSprite* pSprite = CCSprite::create("Ghost_house@2x.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen

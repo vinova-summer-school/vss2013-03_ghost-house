@@ -57,8 +57,8 @@ bool GamePlay::init()
 		////////////////*** Outline Background ***///////////////////////
 		// 1. Create some menu items
 		// Create the "pause" menu item with a pause icon, it's an auto release object
-		pPauseItem = CCMenuItemImage::create("PauseButton.png",
-			"PauseButtonSelected.png",
+		pPauseItem = CCMenuItemImage::create("PauseButton@2x.png",
+			"PauseButtonSelected@2x.png",
 			this,
 			menu_selector(GamePlay::menuPauseCallback));
 		CC_BREAK_IF(! pPauseItem);
@@ -103,7 +103,7 @@ bool GamePlay::init()
 
 		pHP = CCLabelTTF::create(HPString, "Calibri", (int)size.height/16);
 		pHP->setPosition(ccp(0.1*size.width, 0.77*size.height));
-		this->addChild(pHP, 6);
+		this->addChild(pHP, 3);
 
 		// Wave
 		wave = 0;
@@ -115,7 +115,7 @@ bool GamePlay::init()
 		this->addChild(pWave, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
-        CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
+        CCSprite* pSprite = CCSprite::create("GamePlayBackground@2x.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen
@@ -139,7 +139,7 @@ bool GamePlay::init()
 		second_item = UserDefault->getIntegerForKey("second_item", 0);
 
 		//"star"
-		pRecoveryHP = CCMenuItemImage::create("PowerStar.png", "PowerStar.png",
+		pRecoveryHP = CCMenuItemImage::create("PowerStar@2x.png", "PowerStar@2x.png",
 			this,
 			menu_selector(GamePlay::RecoveryHPCallback));
 		CC_BREAK_IF (!pRecoveryHP);
@@ -151,7 +151,7 @@ bool GamePlay::init()
 
 		if (first_item == 3 || second_item == 3){
 			// Create ice item
-			pIceItem = CCMenuItemImage::create("ice.png","ice.png",
+			pIceItem = CCMenuItemImage::create("ice@2x.png","ice@2x.png",
 				this,
 				menu_selector(GamePlay::iceEffectCallback));
 			CC_BREAK_IF(! pIceItem);
@@ -168,7 +168,7 @@ bool GamePlay::init()
 
 		if (first_item == 1 || second_item == 1){
 			// Create Slow item
-			pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
+			pSlowItem = CCMenuItemImage::create("Slow@2x.png","Slow@2x.png",
 				this,
 				menu_selector(GamePlay::SlowCallback));
 			CC_BREAK_IF(! pSlowItem);
@@ -185,7 +185,7 @@ bool GamePlay::init()
 
 		if (first_item == 2 || second_item == 2){
 			// Create a Super Damage Item
-			psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
+			psuperDamageItem = CCMenuItemImage::create("superDamage@2x.png","superDamage@2x.png",
 				this,
 				menu_selector(GamePlay::superDamageCallback));
 			CC_BREAK_IF(! psuperDamageItem);
@@ -201,15 +201,15 @@ bool GamePlay::init()
 		}
 
 		/////////////*** GAME OVER BOX ***/////////////////////
-		GameOverBox = CCSprite::create("GameOverBox.png");
+		GameOverBox = CCSprite::create("PauseDialogBox@2x.png");
 		CC_BREAK_IF(! GameOverBox);
 		GameOverBox->setPosition(ccp(size.width/2, size.height/2));
 		this->addChild(GameOverBox,3);
 		GameOverBox->setVisible(false);
 		// A Main Menu button as a menu item
 		CCMenuItemImage *pOverBox_MainMenuItem = CCMenuItemImage::create(
-			"MainMenuButton.png",
-			"MainMenuButtonSelected.png",
+			"MainMenuButton@2x.png",
+			"MainMenuButtonSelected@2x.png",
 			this,
 			menu_selector(PauseLayer::menuMainMenuCallback));
 		CC_BREAK_IF(! pOverBox_MainMenuItem);
@@ -223,7 +223,7 @@ bool GamePlay::init()
 		GameOverBox->addChild(pOverBox_MainMenu);
 
 		// Text: GAME OVER
-		CCLabelTTF* pGameOverLabel = CCLabelTTF::create("Game Over !!!", "Arial", 24);
+		CCLabelTTF* pGameOverLabel = CCLabelTTF::create("Game Over !!!", "Arial", (int)size.height/13);
 		ccColor3B GameOverLabelColor = {255,255,0};
 		pGameOverLabel->setColor(GameOverLabelColor);
         CC_BREAK_IF(! pGameOverLabel);
@@ -361,7 +361,7 @@ void GamePlay::update (float pDt){
 				tmpWave = wave;
 			}
 			if (wave - tmpWave == 2) pRecoveryHP->setVisible(false);
-			if (IntervalMultipler >= 0.5) IntervalMultipler -= (float) 0.02;
+			if (IntervalMultipler >= 0.4) IntervalMultipler -= (float) 0.02;
 			time = 60*IntervalMultipler;
 			stt++;
 			wave++;
