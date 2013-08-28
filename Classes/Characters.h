@@ -48,13 +48,13 @@ public:
                 pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
 				break;
 			case 1:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 2*speedMultipler;
 				break;
 			case 2:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 2.5*speedMultipler;
 				break;
 			case 3:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 1.5*speedMultipler;
 				pos.y = initPos.y + 15*sin (0.05*pos.x);
 				break;
 			case 4:
@@ -87,7 +87,7 @@ public:
 class Ghost1 : public character{
 public:
 	Ghost1 (){
-		Sprite = CCSprite::create("ghost1@2x.png");
+		Sprite = CCSprite::create("ghost1.png");
 		initHP = 2;
 		init ();
 		isGhost = true;
@@ -97,7 +97,7 @@ public:
 class Ghost2 : public character{
 public:
 	Ghost2 (){
-		Sprite = CCSprite::create("ghost2@2x.png");
+		Sprite = CCSprite::create("ghost2.png");
 		initHP = 3;
 		init ();
 		isGhost = true;
@@ -107,7 +107,7 @@ public:
 class Angel : public character{
 public:
 	Angel (){
-		Sprite = CCSprite::create("angel_normal@2x.png");
+		Sprite = CCSprite::create("angel_normal.png");
 		initHP = 1;
 		init ();
 		isGhost = false;

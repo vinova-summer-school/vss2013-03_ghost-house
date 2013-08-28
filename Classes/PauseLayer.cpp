@@ -6,15 +6,15 @@ bool PauseLayer::init(){
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 
 	
-		CCSprite* PauseDialogBox = CCSprite::create("PauseDialogBox@2x.png");
+		CCSprite* PauseDialogBox = CCSprite::create("PauseDialogBox.png");
 		//CC_BREAK_IF(! PauseDialogBox);
 		PauseDialogBox->setPosition(ccp(size.width/2, size.height/2));
 		this->addChild(PauseDialogBox,3);
 
 		// A resume button as a menu item
 		CCMenuItemImage *pPauseBox_ResumeItem = CCMenuItemImage::create(
-			"PauseBox_ResumeButton@2x.png",
-			"PauseBox_ResumeButtonSelected@2x.png",
+			"PauseBox_ResumeButton.png",
+			"PauseBox_ResumeButtonSelected.png",
 			this,
 			menu_selector(PauseLayer::menuResumeCallback));
 		//CC_BREAK_IF(! pPauseBox_ResumeItem);
@@ -29,8 +29,8 @@ bool PauseLayer::init(){
 
 		// A Back button as a menu item
 		CCMenuItemImage *pPauseBox_MainMenuItem = CCMenuItemImage::create(
-			"MainMenuButton@2x.png",
-			"MainMenuButtonSelected@2x.png",
+			"MainMenuButton.png",
+			"MainMenuButtonSelected.png",
 			this,
 			menu_selector(PauseLayer::menuMainMenuCallback));
 		//CC_BREAK_IF(! pPauseBox_MainMenuItem);

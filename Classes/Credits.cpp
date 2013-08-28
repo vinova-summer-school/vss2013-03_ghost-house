@@ -47,8 +47,8 @@ bool Credits::init()
 		// 1** Add a menu item with options image, which is clicked to go to the Back
 		// Create a "Options" menu item with the "options" icon, it's an auto release object
 		CCMenuItemImage *pBackItem = CCMenuItemImage::create(
-			"BackArrow@2x.png",
-			"BackArrowSelected@2x.png",
+			"BackArrow.png",
+			"BackArrowSelected.png",
 			this,
 			menu_selector(Credits::menuBackCallback));
 

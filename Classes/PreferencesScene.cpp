@@ -47,8 +47,8 @@ bool Preferences::init()
 		/////////////////////////******MENU ITEMS********/////////////////////////
         // Create a "back" menu item with close icon, it's an auto release object.
         CCMenuItemImage *pBackItem = CCMenuItemImage::create(
-            "BackArrow@2x.png",
-            "BackArrowSelected@2x.png",
+            "BackArrow.png",
+            "BackArrowSelected.png",
             this,
             menu_selector(Preferences::menuBackCallback));
         CC_BREAK_IF(! pBackItem);
@@ -84,7 +84,7 @@ bool Preferences::init()
 		numItemsSelected = 0;
 		
 		// Create Slow item
-		pSlowItem = CCMenuItemImage::create("Slow@2x.png","Slow@2x.png",
+		pSlowItem = CCMenuItemImage::create("Slow.png","Slow.png",
 			this,
 			menu_selector(Preferences::SlowCallback));
 		CC_BREAK_IF(! pSlowItem);
@@ -113,7 +113,7 @@ bool Preferences::init()
 		}
 
 		// Create a Super Damage Item
-		psuperDamageItem = CCMenuItemImage::create("superDamage@2x.png","superDamage@2x.png",
+		psuperDamageItem = CCMenuItemImage::create("superDamage.png","superDamage.png",
 			this,
 			menu_selector(Preferences::superDamageCallback));
 		CC_BREAK_IF(! psuperDamageItem);
@@ -143,7 +143,7 @@ bool Preferences::init()
 		}
 
 		// Create ice item
-		pIceItem = CCMenuItemImage::create("ice@2x.png","ice@2x.png",
+		pIceItem = CCMenuItemImage::create("ice.png","ice.png",
 			this,
 			menu_selector(Preferences::iceEffectCallback));
 		CC_BREAK_IF(! pIceItem);
@@ -172,7 +172,7 @@ bool Preferences::init()
 		}
 
         // 3. Add add a splash screen
-        CCSprite* pSprite = CCSprite::create("OptionSprite@2x.png");
+        CCSprite* pSprite = CCSprite::create("OptionSprite.png");
         CC_BREAK_IF(! pSprite);
 
         // Place the sprite on the center of the screen
