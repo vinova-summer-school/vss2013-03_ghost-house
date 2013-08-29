@@ -162,12 +162,15 @@ bool StartScreen::init()
 //////////////***MENU CALLBACK***////////////////////////////////////////
 void StartScreen::menuStartCallback(CCObject* pSender){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
-	CCDirector::sharedDirector()->replaceScene(GamePlay::scene());
+	CCTransitionCrossFade* trans = CCTransitionCrossFade::create(0.3f, GamePlay::scene());
+	CCDirector::sharedDirector()->replaceScene(trans);
 }
 
 void StartScreen::menuPreferencesCallback(CCObject* pSender){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
-	CCDirector::sharedDirector()->replaceScene(Preferences::scene());
+	CCTransitionCrossFade* trans = CCTransitionCrossFade::create(0.4f, Preferences::scene());
+	CCDirector::sharedDirector() -> replaceScene(trans);
+	//CCDirector::sharedDirector()->replaceScene(Preferences::scene());
 }
 
 void StartScreen::menuCloseCallback(CCObject* pSender)
@@ -177,5 +180,7 @@ void StartScreen::menuCloseCallback(CCObject* pSender)
 }
 
 void StartScreen::menuCreditsCallback(CCObject* pSender){
-	CCDirector::sharedDirector()->replaceScene(Credits::scene());
+	CCTransitionCrossFade* trans = CCTransitionCrossFade::create(0.4f, Credits::scene());
+	CCDirector::sharedDirector() -> replaceScene(trans);
+	//CCDirector::sharedDirector()->replaceScene(Credits::scene());
 }

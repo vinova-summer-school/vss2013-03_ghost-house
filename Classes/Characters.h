@@ -51,14 +51,14 @@ public:
 				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 2*speedMultipler;
 				break;
 			case 2:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 2.5*speedMultipler;
+				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 1.75*speedMultipler;
 				break;
 			case 3:
 				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 1.5*speedMultipler;
 				pos.y = initPos.y + 15*sin (0.05*pos.x);
 				break;
 			case 4:
-				pos.x -= 1*speedMultipler;
+				pos.x -= 1.75*speedMultipler;
 				pos.y = initPos.y + 30*sin (0.025*pos.x);
 				break;
 				

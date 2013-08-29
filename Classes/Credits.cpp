@@ -66,7 +66,7 @@ bool Credits::init()
 		//////////////////*****END OF MENU ITEMS***********/////////////////////
 
         // Create a label and initialize with string "Hello World".
-		CCLabelTTF* pLabel = CCLabelTTF::create("Ghost House\nTesting Build\n\n\nCreated by Khanh, Ngoc, Khoa\n\n\nA product of VSS2013", "Calibri", size.height/16);
+		CCLabelTTF* pLabel = CCLabelTTF::create("Ghost House (Testing Build)\nCreated by Khanh, Ngoc, Khoa\nA product of VSS2013", "Noteworthy", size.height/16);
         CC_BREAK_IF(! pLabel);
 
         // Get window size and place the label upper. 

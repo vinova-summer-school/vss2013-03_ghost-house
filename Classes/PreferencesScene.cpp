@@ -69,7 +69,6 @@ bool Preferences::init()
 		CCLabelTTF* pPrefMainTitle = CCLabelTTF::create("Choose up to 2 items", "Verdana", (int)(size.height/10));
 		ccColor3B PrefMainTitleColor = {255,255,0};
 		pPrefMainTitle->setColor(PrefMainTitleColor);
-        CC_BREAK_IF(! pPrefMainTitle);
 
         // place the label upper. 
         //CCSize size = CCDirector::sharedDirector()->getWinSize();
@@ -190,11 +189,10 @@ bool Preferences::init()
     return bRet;
 }
 
-void Preferences::menuBackCallback(CCObject* pSender)
-{
-    // "back" menu item clicked
+void Preferences::menuBackCallback(CCObject* pSender){
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("click.wav");
-	CCDirector::sharedDirector()->replaceScene(StartScreen::scene());
+	CCTransitionCrossFade* trans = CCTransitionCrossFade::create(0.4f, StartScreen::scene());
+	CCDirector::sharedDirector()->replaceScene(trans);
 }
 
 void Preferences::SlowCallback(CCObject* pSender){

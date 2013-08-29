@@ -35,8 +35,8 @@ typedef struct tagResource
     char directory[100];
 }Resource;
 
-static Resource smallResource =  { cocos2d::CCSizeMake(480, 320),   "iphone_480x320" };
 static Resource largeResource =  { cocos2d::CCSizeMake(960, 640),  "iphone_960x640" };
+static Resource smallResource =  { cocos2d::CCSizeMake(480, 320),   "iphone_480x320" };
 
 #if (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_960X640)
 static cocos2d::CCSize designResolutionSize = cocos2d::CCSizeMake(960, 640);

@@ -47,7 +47,7 @@ bool GamePlay::init()
         //////////////////////////////////////////////////////////////////////////
 
 		//Get the sizes
-		CCSize size = CCDirector::sharedDirector()->getWinSize();
+		size = CCDirector::sharedDirector()->getWinSize();
 
 		//Game soundtrack
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
@@ -76,25 +76,25 @@ bool GamePlay::init()
 
 		// 2. Add a score label.
 		score = 0;
-		sprintf(ScoreString, "Score : %d", score);
+		sprintf(ScoreString, "Score : %.1f", score);
 
 		pScore = CCLabelTTF::create(ScoreString, "Calibri", (int)size.height/16);
         CC_BREAK_IF(! pScore);
         // place the label upper.
 		pScore->setAnchorPoint(ccp(0,0.5));
-		pScore->setPosition(ccp(0.7*size.width, 0.9*size.height));
+		pScore->setPosition(ccp(0.6*size.width, 0.92*size.height));
 
         // Add the label to GamePlay layer as a child layer.
         this->addChild(pScore, 6);
 
 		// High Score label
-		HighScore = UserDefault->getIntegerForKey("high_score", 0);
-		sprintf (HighScoreString, "High: %d", HighScore);
+		HighScore = UserDefault->getFloatForKey("high_score", 0);
+		sprintf (HighScoreString, "High: %.1f", HighScore);
 
 		pHighScore = CCLabelTTF::create(HighScoreString, "Calibri", (int)size.height/18);
 		CC_BREAK_IF(! pHighScore);
 		pHighScore->setAnchorPoint(ccp(0,0.5));
-		pHighScore->setPosition(ccp(0.7*size.width, 0.95*size.height));
+		pHighScore->setPosition(ccp(0.6*size.width, 0.97*size.height));
 		this->addChild(pHighScore, 4);
 
         // House Health Points
@@ -109,9 +109,9 @@ bool GamePlay::init()
 		wave = 0;
 		sprintf (WaveString, "Wave: %d", wave);
 
-		pWave = CCLabelTTF::create(WaveString, "Calibri", (int)size.height/18);
+		pWave = CCLabelTTF::create(WaveString, "Calibri", (int)size.height/20);
 		pWave->setAnchorPoint(ccp(1,0));
-		pWave->setPosition(ccp(0.98*size.width, 0.02*size.height));
+		pWave->setPosition(ccp(size.width - 10, 10));
 		this->addChild(pWave, 6);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
@@ -137,6 +137,10 @@ bool GamePlay::init()
 	
 		first_item = UserDefault->getIntegerForKey("first_item", 0);
 		second_item = UserDefault->getIntegerForKey("second_item", 0);
+
+		m_emitter = CCParticleSmoke::create();
+		this->addChild(m_emitter, 1);
+		m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("fire.png") );
 
 		//"star"
 		pRecoveryHP = CCMenuItemImage::create("PowerStar.png", "PowerStar.png",
@@ -223,16 +227,16 @@ bool GamePlay::init()
 		GameOverBox->addChild(pOverBox_MainMenu);
 
 		// Text: GAME OVER
-		CCLabelTTF* pGameOverLabel = CCLabelTTF::create("Game Over !!!", "Arial", (int)size.height/13);
+		pGameOver = CCLabelTTF::create("", "Arial", (int)size.height/13);
 		ccColor3B GameOverLabelColor = {255,255,0};
-		pGameOverLabel->setColor(GameOverLabelColor);
-        CC_BREAK_IF(! pGameOverLabel);
+		pGameOver->setColor(GameOverLabelColor);
+        CC_BREAK_IF(! pGameOver);
 
         // Place the label upper.
-        pGameOverLabel->setPosition(ccp(GameOverBox->getContentSize().width/2 , 0.75*GameOverBox->getContentSize().height));
+        pGameOver->setPosition(ccp(GameOverBox->getContentSize().width/2 , 0.75*GameOverBox->getContentSize().height));
 
         // Add the label to GamePlay layer as a child layer.
-        GameOverBox->addChild(pGameOverLabel, 4);
+        GameOverBox->addChild(pGameOver, 4);
 
 		///////**** END OF GAME OVER BOX ***//////////////
 		
@@ -253,8 +257,7 @@ bool GamePlay::init()
 
 	UserDefault = CCUserDefault::sharedUserDefault();
 
-	time = stt = 0;
-	tmpWave = 0;
+	IntervalTime = StarTime = SmokeTime = stt = 0;
 	isFreeze = false;
 	freezeRefreshTime = 0;
 	isSlow = false;
@@ -263,7 +266,7 @@ bool GamePlay::init()
 	damageRefreshTime = 0;
 
 	speedMultipler = rHP = 1;
-	IntervalMultipler = 2;
+	IntervalMultipler = 1.6f;
 
 
     return bRet;
@@ -291,7 +294,10 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				else touchingState = 2;
 				if (touchingState == 1){
 					ghost1[i].reduceHPBy (rHP);
-					if (ghost1[i].isDead()) score += 20;
+					if (ghost1[i].isDead()){
+						score += 20;
+						m_emitter->setPosition(ghost1[i].getSprite()->getPosition());
+					}
 					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
 				}
 			}
@@ -303,7 +309,10 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				else touchingState = 2;
 				if (touchingState == 1) {
 					ghost2[i].reduceHPBy (rHP);
-					if (ghost2[i].isDead()) score += 30;
+					if (ghost2[i].isDead()){
+						score += 30;
+						m_emitter->setPosition(ghost2[i].getSprite()->getPosition());
+					}
 					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
 				}
 			}
@@ -333,52 +342,80 @@ void GamePlay::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent){
 ///////////////////////////////////////////////////////////////////////////
 
 //Using *update* to sprites
-void GamePlay::update (float pDt){
-	//setAllButtonsEnabled (true);
+void GamePlay::update (float dt){
 	// Number's strings
 	sprintf (HPString, "HP: %d", HouseHP);
-	sprintf (ScoreString, "Score: %d", score);
+	sprintf (ScoreString, "Score: %.1f", score);
 	sprintf (WaveString, "Wave: %d", wave);
 	pHP->setString(HPString);
 	pScore->setString(ScoreString);
 	pWave->setString(WaveString);
-
+	
+	score+=dt;
+	
 	// Effect of in-game items
-	if (first_item == 1 || second_item == 1) slowUpdate ();
-	if (first_item == 2 || second_item == 2) superDamageUpdate ();
-	if (first_item == 3 || second_item == 3) iceUpdate ();
-
+	if (first_item == 1 || second_item == 1) slowUpdate (dt);
+	if (first_item == 2 || second_item == 2) superDamageUpdate (dt);
+	if (first_item == 3 || second_item == 3) iceUpdate (dt);
+    
+    /////////////**** TIME HANDLER ****/////////////////
 	if (!isFreeze) {
-		if (time == 0){
+		if (IntervalTime <= 0){
 			int random = rand() % 100 + 1; // get a random number from 1 to 100
 			// set the chance rate for each character to be summonned
 			if (random >= 1 && random <= 50) ghost1[stt].getSprite()->setVisible(true);
 			if (random >= 31 && random <= 80) ghost2[stt].getSprite()->setVisible(true);
 			if (random >= 81 && random <= 100) angel[stt].getSprite()->setVisible(true);
-			if (random == 1 || random == 49 || random == 100) {
-				pRecoveryHP->setPosition(rand()%200+100, rand()%260+25);
-				pRecoveryHP->setVisible(true);
-				tmpWave = wave;
-			}
-			if (wave - tmpWave == 2) pRecoveryHP->setVisible(false);
-			if (IntervalMultipler >= 0.3) IntervalMultipler -= 0.02f;
-			time = 60*IntervalMultipler;
+            
+			if (IntervalMultipler >= 0.4) IntervalMultipler -= 0.02f;
+			IntervalTime = 60*IntervalMultipler;
 			stt++;
 			wave++;
-			score += 5;
-			if (speedMultipler <= 2.5) speedMultipler += 0.025f;
+			if (speedMultipler <= 2.5){
+                if (wave >= 150){
+                    ccColor3B pWaveColor = {255,100,100};
+                    pWave->setColor(pWaveColor);
+                    speedMultipler += 0.03f;
+                }
+                else speedMultipler += 0.015f;
+            }
 			if (stt == 5) stt = 0;
 		}
-		time--;
+		IntervalTime--;
 	}
+    
+    if (StarTime <= 0){
+        if (isShowingStar == true){
+            isShowingStar = false;
+            pRecoveryHP->setVisible(false);
+        }
+        else if (rand()%100 == 1 || rand()%100 == 99){
+            isShowingStar = true;
+            pRecoveryHP->setPosition(rand()%(int)((0.95-0.2)*size.width) + 0.2*size.width, rand()%(int)((0.8-0.05)*size.height) + 0.05*size.height);
+            pRecoveryHP->setVisible(true);
+        }
+        StarTime = 1.5;
+    }
+	StarTime -= dt;
+
+	if (SmokeTime <= 0){
+		m_emitter->setPosition(ccp(size.width + 100, 0));
+		SmokeTime = 1;
+	}
+	SmokeTime -= dt;
+
+    ///////////////**** END OF TIME HANDLER ****////////////////////////////////
+    
 	// NO WAY TO ACCESS THAT FUCKING HOUSEHP OUTSIDE CLASS SO WE HAVE TO PASS THESE PARAMETERS
 	for (int i=0; i<angelCount; i++) angel[i].move(HouseHP,1);
 	for (int i=0; i<ghost1Count; i++) ghost1[i].move(HouseHP,speedMultipler);
 	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,speedMultipler);
 	
 	if (HouseHP <= 0){
+        sprintf(ScoreString, "Your Score is: %.1f", score);
+        pGameOver->setString(ScoreString);
 		GameOverBox->setVisible(true);
-		if (score > HighScore) UserDefault->setIntegerForKey("high_score", score);
+		if (score > HighScore) UserDefault->setFloatForKey("high_score", score);
 		pauseSchedulerAndActions();
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 	}
