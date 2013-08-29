@@ -42,6 +42,9 @@ bool Credits::init()
 		//Get the sizes
 		CCSize size = CCDirector::sharedDirector()->getWinSize();
 
+		// Load User Default
+		UserDefault = CCUserDefault::sharedUserDefault();
+
 		/////////////////////////******MENU ITEMS********/////////////////////////
 
 		// 1** Add a menu item with options image, which is clicked to go to the Back
@@ -67,20 +70,36 @@ bool Credits::init()
 
         // Create a label and initialize with string "Hello World".
 		CCLabelTTF* pLabel = CCLabelTTF::create("Ghost House (Testing Build)\nCreated by Khanh, Ngoc, Khoa\nA product of VSS2013", "Noteworthy", size.height/16);
-        CC_BREAK_IF(! pLabel);
-
-        // Get window size and place the label upper. 
-        //CCSize size = CCDirector::sharedDirector()->getWinSize();
-        pLabel->setPosition(ccp(size.width / 2, size.height /2));
-
-        // Add the label to Credits layer as a child layer.
+        pLabel->setPosition(ccp(size.width/2, 0.7*size.height));
         this->addChild(pLabel, 1);
+
+		// Credit for cocos2d-x
+		CCLabelTTF* pCredits = CCLabelTTF::create("Powered by Cocos2d-x game engine", "Calibri", size.height/16);
+		pCredits->setPosition(ccp(size.width/2, 0.3*size.height));
+		this->addChild(pCredits, 1);
+
+		CCSprite* cocos2dxLogo = CCSprite::create("cocos2dx_landscape.png");
+		cocos2dxLogo->setPosition(ccp(size.width/2, 0.18*size.height));
+		this->addChild(cocos2dxLogo, 1);
+
+		// A button to reset high score
+		pResetScoreItem = CCMenuItemImage::create("reset_highscore.png", "reset_highscore.png",
+			this, menu_selector(Credits::menuResetScoreCallback));
+		pResetScoreItem->setAnchorPoint(ccp(1,0));
+		pResetScoreItem->setPosition(size.width - 10, 10);
+
+		if (UserDefault->getFloatForKey("high_score", 0) < 100) pResetScoreItem->setVisible(false);
+
+		CCMenu* pResetScore = CCMenu::create(pResetScoreItem, NULL);
+		pResetScore->setPosition(CCPointZero);
+		CC_BREAK_IF(! pResetScore);
+		this->addChild(pResetScore, 1);
 
         bRet = true;
 		
     } while (0);
 
-	setTouchEnabled (true);
+	clicksRemainingToConfirm = 3;
 
     return bRet;
 }
@@ -89,4 +108,13 @@ bool Credits::init()
 //////////////***MENU CALLBACK***////////////////////////////////////////
 void Credits::menuBackCallback(CCObject *pSender){
 	CCDirector::sharedDirector()->replaceScene(StartScreen::scene());
+}
+
+void Credits::menuResetScoreCallback(CCObject* pSender){
+	// Requires 3 clicks on this menu to reset the high score
+	clicksRemainingToConfirm--;
+	if (clicksRemainingToConfirm == 0){
+		UserDefault->setFloatForKey("high_score", 0);
+		pResetScoreItem->setVisible(false);
+	}
 }

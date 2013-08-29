@@ -70,8 +70,8 @@ void AppDelegate::applicationDidEnterBackground() {
     CCDirector::sharedDirector()->stopAnimation();
 
     // if you use SimpleAudioEngine, it must be pause
-	isBackGroundMusicPlaying = CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying();
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+	isBackGroundMusicPlaying = CocosDenshion::SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying();
 }
 
 // this function will be called when the app is active again

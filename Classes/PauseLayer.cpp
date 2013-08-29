@@ -14,8 +14,7 @@ bool PauseLayer::init(){
 		// Label shows "Game Paused"
 		CCLabelTTF* PauseLabel = CCLabelTTF::create("Paused", "Calibri", size.height/8);
 		PauseLabel->setPosition(ccp(0.5*PauseDialogBox->getContentSize().width, 0.75*PauseDialogBox->getContentSize().height));
-		ccColor3B PauseTitleColor = {185,218,22};
-		PauseLabel->setColor(PauseTitleColor);
+		PauseLabel->setColor(ccc3(185,218,22));
 		PauseDialogBox->addChild(PauseLabel);
 
 		// A resume button as a menu item

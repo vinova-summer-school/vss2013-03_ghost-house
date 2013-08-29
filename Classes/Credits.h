@@ -8,6 +8,10 @@
 
 class Credits : public cocos2d::CCLayer
 {
+	CCMenuItemImage* pResetScoreItem;
+	short clicksRemainingToConfirm;
+
+	CCUserDefault* UserDefault;
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
@@ -17,6 +21,7 @@ public:
     
     // a selector callback
     void menuBackCallback(CCObject* pSender);
+	void menuResetScoreCallback(CCObject* pSender);
     
     // implement the "static node()" method manually
 	CREATE_FUNC(Credits);

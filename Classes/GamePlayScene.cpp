@@ -95,6 +95,8 @@ bool GamePlay::init()
 		CC_BREAK_IF(! pHighScore);
 		pHighScore->setAnchorPoint(ccp(0,0.5));
 		pHighScore->setPosition(ccp(0.6*size.width, 0.97*size.height));
+
+		if (HighScore < 100) pHighScore->setVisible(false);
 		this->addChild(pHighScore, 4);
 
         // House Health Points
@@ -228,8 +230,7 @@ bool GamePlay::init()
 
 		// Text: GAME OVER
 		pGameOver = CCLabelTTF::create("", "Arial", (int)size.height/13);
-		ccColor3B GameOverLabelColor = {255,255,0};
-		pGameOver->setColor(GameOverLabelColor);
+		pGameOver->setColor(ccc3(255,255,0));
         CC_BREAK_IF(! pGameOver);
 
         // Place the label upper.
@@ -368,20 +369,19 @@ void GamePlay::update (float dt){
 			if (random >= 81 && random <= 100) angel[stt].getSprite()->setVisible(true);
             
 			if (IntervalMultipler >= 0.4) IntervalMultipler -= 0.02f;
-			IntervalTime = 60*IntervalMultipler;
+			IntervalTime = IntervalMultipler;
 			stt++;
 			wave++;
 			if (speedMultipler <= 2.5){
                 if (wave >= 150){
-                    ccColor3B pWaveColor = {255,100,100};
-                    pWave->setColor(pWaveColor);
+                    pWave->setColor(ccc3(255,100,100));
                     speedMultipler += 0.03f;
                 }
                 else speedMultipler += 0.015f;
             }
 			if (stt == 5) stt = 0;
 		}
-		IntervalTime--;
+		IntervalTime -= dt;
 	}
     
     if (StarTime <= 0){
@@ -400,7 +400,7 @@ void GamePlay::update (float dt){
 
 	if (SmokeTime <= 0){
 		m_emitter->setPosition(ccp(size.width + 100, 0));
-		SmokeTime = 1;
+		SmokeTime = 0.5;
 	}
 	SmokeTime -= dt;
 
@@ -431,7 +431,7 @@ void GamePlay::menuPauseCallback(CCObject* pSender){
 	setVisible (false);
 	pauseLayer->setVisible(true);
 	
-	//CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();	
 }
 
 void GamePlay::RecoveryHPCallback(CCObject* pSender){

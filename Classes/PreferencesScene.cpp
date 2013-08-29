@@ -67,8 +67,7 @@ bool Preferences::init()
 
         // Create a label and initialize with string "Preferences".
 		CCLabelTTF* pPrefMainTitle = CCLabelTTF::create("Choose up to 2 items", "Verdana", (int)(size.height/10));
-		ccColor3B PrefMainTitleColor = {255,255,0};
-		pPrefMainTitle->setColor(PrefMainTitleColor);
+		pPrefMainTitle->setColor(ccc3(255,255,0));
 
         // place the label upper. 
         //CCSize size = CCDirector::sharedDirector()->getWinSize();

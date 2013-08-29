@@ -43,22 +43,31 @@ public:
 	// Move the sprite
 	void move (int &HouseHP, const float &speedMultipler){
 		if (Sprite->isVisible()){
+			CCDirector* pDirector = CCDirector::sharedDirector();
+			CCSize size = pDirector->getWinSize();
+			/*
+			It should not be slower of faster if we modify the FPS in AppDelegate
+			And also for the multi-resolution support
+			So we have the multipler below
+			*/
+			float AnimationMultipler = 60*pDirector->getAnimationInterval() * size.width/960;
+
 			switch(moveStyle){
 			case 0:
-                pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * speedMultipler;
+				pos.x -= AnimationMultipler * 2*speedMultipler;
 				break;
 			case 1:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 2*speedMultipler;
+				pos.x -= AnimationMultipler * 4*speedMultipler;
 				break;
 			case 2:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 1.75*speedMultipler;
+				pos.x -= AnimationMultipler * 3.5*speedMultipler;
 				break;
 			case 3:
-				pos.x -= CCDirector::sharedDirector()->getWinSize().width/480 * 1.5*speedMultipler;
+				pos.x -= AnimationMultipler * 3*speedMultipler;
 				pos.y = initPos.y + 15*sin (0.05*pos.x);
 				break;
 			case 4:
-				pos.x -= 1.75*speedMultipler;
+				pos.x -= AnimationMultipler * 2.5*speedMultipler;
 				pos.y = initPos.y + 30*sin (0.025*pos.x);
 				break;
 				
