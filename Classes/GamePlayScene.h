@@ -56,6 +56,8 @@ public:
     static cocos2d::CCScene* scene();
     
     // Menu items callback
+	void setAllMenuItemsEnabled (const bool& isEnable);
+	
 	void menuPauseCallback(CCObject* pSender);				// Pause button
 
 	void RecoveryHPCallback(CCObject* pSender);

@@ -50,8 +50,7 @@ bool GamePlay::init()
 		size = CCDirector::sharedDirector()->getWinSize();
 
 		//Game soundtrack
-		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
-		"music.wav",true);
+		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("music.wav",true);
 		
 
 		////////////////*** Outline Background ***///////////////////////
@@ -85,7 +84,7 @@ bool GamePlay::init()
 		pScore->setPosition(ccp(0.6*size.width, 0.92*size.height));
 
         // Add the label to GamePlay layer as a child layer.
-        this->addChild(pScore, 6);
+        this->addChild(pScore, 1);
 
 		// High Score label
 		HighScore = UserDefault->getFloatForKey("high_score", 0);
@@ -97,7 +96,7 @@ bool GamePlay::init()
 		pHighScore->setPosition(ccp(0.6*size.width, 0.97*size.height));
 
 		if (HighScore < 100) pHighScore->setVisible(false);
-		this->addChild(pHighScore, 4);
+		this->addChild(pHighScore, 1);
 
         // House Health Points
 		HouseHP = 10;
@@ -105,7 +104,7 @@ bool GamePlay::init()
 
 		pHP = CCLabelTTF::create(HPString, "Calibri", (int)size.height/16);
 		pHP->setPosition(ccp(0.1*size.width, 0.77*size.height));
-		this->addChild(pHP, 3);
+		this->addChild(pHP, 1);
 
 		// Wave
 		wave = 0;
@@ -114,7 +113,7 @@ bool GamePlay::init()
 		pWave = CCLabelTTF::create(WaveString, "Calibri", (int)size.height/20);
 		pWave->setAnchorPoint(ccp(1,0));
 		pWave->setPosition(ccp(size.width - 10, 10));
-		this->addChild(pWave, 6);
+		this->addChild(pWave, 1);
 		
 		// 3. Add add a splash screen, show the cocos2d splash image.
         CCSprite* pSprite = CCSprite::create("GamePlayBackground.png");
@@ -132,8 +131,8 @@ bool GamePlay::init()
 		ghost2Count = 5;
 		angelCount = 5;
 		// ghosts
-		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),2);
-		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),2);
+		for (int i=0; i<ghost1Count; i++) this->addChild(ghost1[i].getSprite(),4);
+		for (int i=0; i<ghost2Count; i++) this->addChild(ghost2[i].getSprite(),3);
 		// angels
 		for (int i=0; i<angelCount; i++) this->addChild(angel[i].getSprite(),1);
 	
@@ -141,7 +140,7 @@ bool GamePlay::init()
 		second_item = UserDefault->getIntegerForKey("second_item", 0);
 
 		m_emitter = CCParticleSmoke::create();
-		this->addChild(m_emitter, 1);
+		this->addChild(m_emitter, 2);
 		m_emitter->setTexture( CCTextureCache::sharedTextureCache()->addImage("fire.png") );
 
 		//"star"
@@ -153,7 +152,7 @@ bool GamePlay::init()
 		CCMenu *pRecovery = CCMenu::create(pRecoveryHP,NULL);
 		pRecovery->setPosition(CCPointZero);
 		CC_BREAK_IF(!pRecovery);
-		this->addChild(pRecovery,4);
+		this->addChild(pRecovery,5);
 
 		if (first_item == 3 || second_item == 3){
 			// Create ice item
@@ -169,7 +168,7 @@ bool GamePlay::init()
 			pIce->setPosition(CCPointZero);
 			CC_BREAK_IF(! pIce);
 
-			this->addChild(pIce, 4);
+			this->addChild(pIce, 1);
 		}
 
 		if (first_item == 1 || second_item == 1){
@@ -186,7 +185,7 @@ bool GamePlay::init()
 			pSlow->setPosition(CCPointZero);
 			CC_BREAK_IF(! pSlow);
 
-			this->addChild(pSlow, 4);
+			this->addChild(pSlow, 1);
 		}
 
 		if (first_item == 2 || second_item == 2){
@@ -203,14 +202,14 @@ bool GamePlay::init()
 			psuperDamage->setPosition(CCPointZero);
 			CC_BREAK_IF(! psuperDamage);
 
-			this->addChild(psuperDamage, 4);
+			this->addChild(psuperDamage, 1);
 		}
 
 		/////////////*** GAME OVER BOX ***/////////////////////
 		GameOverBox = CCSprite::create("PauseDialogBox.png");
 		CC_BREAK_IF(! GameOverBox);
 		GameOverBox->setPosition(ccp(size.width/2, size.height/2));
-		this->addChild(GameOverBox,3);
+		this->addChild(GameOverBox,6);
 		GameOverBox->setVisible(false);
 		// A Main Menu button as a menu item
 		CCMenuItemImage *pOverBox_MainMenuItem = CCMenuItemImage::create(
@@ -237,16 +236,14 @@ bool GamePlay::init()
         pGameOver->setPosition(ccp(GameOverBox->getContentSize().width/2 , 0.75*GameOverBox->getContentSize().height));
 
         // Add the label to GamePlay layer as a child layer.
-        GameOverBox->addChild(pGameOver, 4);
+        GameOverBox->addChild(pGameOver);
 
 		///////**** END OF GAME OVER BOX ***//////////////
 		
 
 		///******* This is the streak
 		streak = CCMotionStreak::create(0.5, 10, 30, ccWHITE, "thunder.png" );
-		this->addChild(streak);
-		//streak->setPosition( ccp(size.width/2, size.height/2) );
-		streak->setZOrder (4);
+		this->addChild(streak,5);
 
 		
         bRet = true;
@@ -299,7 +296,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 						score += 20;
 						m_emitter->setPosition(ghost1[i].getSprite()->getPosition());
 					}
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
 				}
 			}
 	if (touching == false)
@@ -314,7 +311,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 						score += 30;
 						m_emitter->setPosition(ghost2[i].getSprite()->getPosition());
 					}
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
 				}
 			}
 	if (touching == false)
@@ -326,7 +323,7 @@ void GamePlay::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent){
 				if (touchingState == 1) {
 					angel[i].reduceHPBy (rHP);
 					if (angel[i].isDead()) score -= 20;
-					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.Wav");
+					CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("hit.wav");
 				}
 			}
 	if (touching == false) touchingState = 3;
@@ -399,7 +396,7 @@ void GamePlay::update (float dt){
 	StarTime -= dt;
 
 	if (SmokeTime <= 0){
-		m_emitter->setPosition(ccp(size.width + 100, 0));
+		m_emitter->setPosition(ccp(-100, 0));
 		SmokeTime = 0.5;
 	}
 	SmokeTime -= dt;
@@ -412,13 +409,27 @@ void GamePlay::update (float dt){
 	for (int i=0; i<ghost2Count; i++) ghost2[i].move(HouseHP,speedMultipler);
 	
 	if (HouseHP <= 0){
-        sprintf(ScoreString, "Your Score is: %.1f", score);
-        pGameOver->setString(ScoreString);
-		GameOverBox->setVisible(true);
-		if (score > HighScore) UserDefault->setFloatForKey("high_score", score);
-		pauseSchedulerAndActions();
+        pauseSchedulerAndActions();
+
+		setTouchEnabled(false);
+		setAllMenuItemsEnabled (false);
+
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+		GameOverBox->setVisible(true);
+
+		sprintf(ScoreString, "Your Score is: %.1f", score);
+        pGameOver->setString(ScoreString);
+		if (score > HighScore) UserDefault->setFloatForKey("high_score", score);
+		
 	}
+}
+
+void GamePlay::setAllMenuItemsEnabled (const bool& isEnabled){
+	pPauseItem->setEnabled(isEnabled);
+	pRecoveryHP->setEnabled(isEnabled);
+	if (first_item == 1 || second_item == 1) pSlowItem->setEnabled(isEnabled);
+	if (first_item == 2 || second_item == 2) psuperDamageItem->setEnabled(isEnabled);
+	if (first_item == 3 || second_item == 3) pIceItem->setEnabled(isEnabled);
 }
 
 
